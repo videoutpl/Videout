@@ -3,6 +3,9 @@
 from moviepy.editor import *
 
 
+# IMAGEMAGICK_BINARY = r'C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe'
+
+
 class Gif:
 
     def __init__(self):
@@ -48,7 +51,14 @@ class Gif:
                                    x_center=x_center, y_center=y_center)
 
     def create_gif(self, output):
+        # TODO: gif that loops fluidly
         # self.clip = self.clip.fx(concatenate([self.clip, self.clip.fx(vfx.time_mirror)]))
+        # self.clip = self.clip.crossfadein(self.clip.duration / 2)
+        self.clip = (CompositeVideoClip([self.clip,
+                                         self.clip.set_start(self.clip.duration / 2),
+                                         self.clip.set_start(self.clip.duration)])
+                     .subclip(self.clip.duration / 2, 3 * self.clip.duration / 2))
+
         self.clip.write_gif(output)
 
     def add_text(self, text, font_size, color, font, interline, pos, duration):
