@@ -6,19 +6,19 @@ from moviepy.editor import *
 # IMAGEMAGICK_BINARY = r'C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe'
 
 
-class Gif:
+class videoClip:
 
     def __init__(self):
         self.clip = None
 
-    def make_gif(self, clip, start_time, end_time):
+    def make_clip(self, clip, start_time, end_time, fps= 29.97):
         """
         Slices a video file between two time frames to create a gif
         :param clip: Name of video file
         :param start_time: Tuple stating time in (hour, min, sec), (min, sec) or (sec)
         :param end_time: Tuple stating time in (hour, min, sec), (min, sec) or (sec)
         """
-        self.clip = VideoFileClip(clip).subclip(start_time, end_time)
+        self.clip = VideoFileClip(clip).subclip(start_time, end_time).set_fps(fps)
 
     def resize(self, new_size):
         """
@@ -29,7 +29,7 @@ class Gif:
         """
         self.clip = self.clip.resize(new_size)
 
-    def crop(self, x1=None, y1=None, x2=None, y2=None,
+    def crop(self, aspectRatio = None, x1=None, y1=None, x2=None, y2=None,
              width=None, height=None, x_center=None, y_center=None):
         """
         Uses moviepy.video.fx.crop module. From documentation:
@@ -46,18 +46,23 @@ class Gif:
         :param x_center: x-axis center
         :param y_center: y-axis center
         """
-        self.clip = self.clip.crop(x1=x1, y1=y1, x2=x2, y2=y2,
-                                   width=width, height=height,
-                                   x_center=x_center, y_center=y_center)
+        if aspectRatio:
+            if aspectRatio == "4:3":
+                self.clip = self.clip.crop(width=self.clip.h*4/3, height=self.clip.h,
+                                           x_center=self.clip.w/2, y_center=self.clip.h/2)
+        else:
+            self.clip = self.clip.crop(x1=x1, y1=y1, x2=x2, y2=y2,
+                                       width=width, height=height,
+                                       x_center=x_center, y_center=y_center)
 
-    def create_gif(self, output):
+    def writeClip(self, output):
         # TODO: gif that loops fluidly
         # self.clip = self.clip.fx(concatenate([self.clip, self.clip.fx(vfx.time_mirror)]))
         # self.clip = self.clip.crossfadein(self.clip.duration / 2)
-        self.clip = (CompositeVideoClip([self.clip,
-                                         self.clip.set_start(self.clip.duration / 2),
-                                         self.clip.set_start(self.clip.duration)])
-                     .subclip(self.clip.duration / 2, 3 * self.clip.duration / 2))
+        # self.clip = (CompositeVideoClip([self.clip,
+        #                                  self.clip.set_start(self.clip.duration / 2),
+        #                                  self.clip.set_start(self.clip.duration)])
+        #              .subclip(self.clip.duration / 2, 3 * self.clip.duration / 2))
 
         self.clip.write_videofile(output)
 
