@@ -47,20 +47,36 @@ class videoClip:
         :param y_center: y-axis center
         """
         if aspectRatio:
-            if aspectRatio == "4:3" or aspectRatio == "1.33.1":
-                self.clip = self.clip.crop(width=self.clip.h*4/3, height=self.clip.h,
-                                           x_center=self.clip.w/2, y_center=self.clip.h/2)
-            elif aspectRatio == "16:9" or aspectRatio == "widescreen" or aspectRatio == "1.77.1":
-                    self.clip = self.clip.crop(width=self.clip.h * 16 / 9, height=self.clip.h,
-                                               x_center=self.clip.w / 2, y_center=self.clip.h / 2)
+            if aspectRatio == "vertical" or aspectRatio == "9:16" or aspectRatio == "phone":
+                self.clip = self.clip.crop(width=self.clip.h*9/16, height=self.clip.h,
+                                           x_center=self.clip.w / 2, y_center=self.clip.h / 2)
+
             elif aspectRatio == "square" or aspectRatio == "1:1":
                 self.clip = self.clip.crop(width=self.clip.h, height=self.clip.h,
                                            x_center=self.clip.w / 2, y_center=self.clip.h / 2)
-            elif aspectRatio == "cinemascope" or aspectRatio == "21:9" or aspectRatio == "2.33.1":
-                self.clip = self.clip.crop(width=self.clip.h*21/9, height=self.clip.h,
+
+            elif aspectRatio == "4:3" or aspectRatio == "1.33:1" or aspectRatio == "letterbox":
+                self.clip = self.clip.crop(width=self.clip.h*1.33, height=self.clip.h,
+                                           x_center=self.clip.w/2, y_center=self.clip.h/2)
+
+            elif aspectRatio == "16:9" or aspectRatio == "widescreen" or aspectRatio == "1.77:1":
+                    self.clip = self.clip.crop(width=self.clip.w, height=self.clip.w/1.77,
+                                               x_center=self.clip.w / 2, y_center=self.clip.h / 2)
+
+            elif aspectRatio == "cinemascope" or aspectRatio == "21:9" or aspectRatio == "2.33:1":
+                self.clip = self.clip.crop(width=self.clip.w, height=self.clip.w/2.33,
                                            x_center=self.clip.w / 2, y_center=self.clip.h / 2)
+
+            elif aspectRatio == "anamorphic" or aspectRatio == "2.35:1":
+                self.clip = self.clip.crop(width=self.clip.w, height=self.clip.w/2.35,
+                                           x_center=self.clip.w / 2, y_center=self.clip.h / 2)
+
             elif aspectRatio == "DCI" or aspectRatio == "2.39:1":
-                self.clip = self.clip.crop(width=self.clip.h * 2.39, height=self.clip.h,
+                self.clip = self.clip.crop(width=self.clip.w, height=self.clip.w/2.39,
+                                           x_center=self.clip.w / 2, y_center=self.clip.h / 2)
+
+            elif aspectRatio == "Digital IMAX" or aspectRatio == "2.9:1":
+                self.clip = self.clip.crop(width=self.clip.w, height=self.clip.w/2.9,
                                            x_center=self.clip.w / 2, y_center=self.clip.h / 2)
         else:
             self.clip = self.clip.crop(x1=x1, y1=y1, x2=x2, y2=y2,
@@ -77,6 +93,9 @@ class videoClip:
         #              .subclip(self.clip.duration / 2, 3 * self.clip.duration / 2))
 
         self.clip.write_videofile(output)
+        self.clip.reader.close()
+        self.clip.audio.reader.close_proc()
+
 
     def add_text(self, text, font_size, color, font, interline, pos, duration):
         text = TextClip(text, fontsize=font_size, color=color,
