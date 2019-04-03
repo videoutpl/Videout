@@ -6,7 +6,7 @@ from animations.videoClip import videoClip
 
 # This file is only used to test methods!!!!
 def main():
-    aspectRatios=["verticals", "square", "letterbox", "widescreen", "cinemascope", "anamorphic", "DCI", "Digital IMAX"]
+    aspectRatios=["vertical", "square", "letterbox", "widescreen", "cinemascope", "anamorphic", "DCI", "Digital IMAX"]
     for ratio in aspectRatios:
 
         clip = os.getenv('USERPROFILE') + '\\Videos\\llama_transformation.mp4'
@@ -15,7 +15,7 @@ def main():
        # vclip.resize(new_size=0.6)
        #  vclip.add_text(text='In my nightmares\nI see rabbits.', font_size=30, color='white',
        #               font='Amiri-Bold', interline=-10, pos=(20, 190), duration=vclip.clip.duration)
-        vclip.crop(aspectRatio=ratio, x_center=608)
+        vclip.crop(aspectRatio=ratio)
         vclip.writeClip(output=(ratio + 'Test.mp4'))
 
 
