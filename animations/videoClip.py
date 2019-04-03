@@ -47,9 +47,21 @@ class videoClip:
         :param y_center: y-axis center
         """
         if aspectRatio:
-            if aspectRatio == "4:3":
+            if aspectRatio == "4:3" or aspectRatio == "1.33.1":
                 self.clip = self.clip.crop(width=self.clip.h*4/3, height=self.clip.h,
                                            x_center=self.clip.w/2, y_center=self.clip.h/2)
+            elif aspectRatio == "16:9" or aspectRatio == "widescreen" or aspectRatio == "1.77.1":
+                    self.clip = self.clip.crop(width=self.clip.h * 16 / 9, height=self.clip.h,
+                                               x_center=self.clip.w / 2, y_center=self.clip.h / 2)
+            elif aspectRatio == "square" or aspectRatio == "1:1":
+                self.clip = self.clip.crop(width=self.clip.h, height=self.clip.h,
+                                           x_center=self.clip.w / 2, y_center=self.clip.h / 2)
+            elif aspectRatio == "cinemascope" or aspectRatio == "21:9" or aspectRatio == "2.33.1":
+                self.clip = self.clip.crop(width=self.clip.h*21/9, height=self.clip.h,
+                                           x_center=self.clip.w / 2, y_center=self.clip.h / 2)
+            elif aspectRatio == "DCI" or aspectRatio == "2.39:1":
+                self.clip = self.clip.crop(width=self.clip.h * 2.39, height=self.clip.h,
+                                           x_center=self.clip.w / 2, y_center=self.clip.h / 2)
         else:
             self.clip = self.clip.crop(x1=x1, y1=y1, x2=x2, y2=y2,
                                        width=width, height=height,
