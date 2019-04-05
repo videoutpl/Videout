@@ -59,7 +59,7 @@ class Gif:
                                          self.clip.set_start(self.clip.duration)])
                      .subclip(self.clip.duration / 2, 3 * self.clip.duration / 2))
 
-        self.clip.write_gif(output)
+        self.clip.write_videofile(output)
 
     def add_text(self, text, font_size, color, font, interline, pos, duration):
         text = TextClip(text, fontsize=font_size, color=color,
