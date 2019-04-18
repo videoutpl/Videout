@@ -6,19 +6,19 @@ from moviepy.editor import *
 # IMAGEMAGICK_BINARY = r'C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe'
 
 
-class videoClip:
+class finalVideo:
 
     def __init__(self):
         self.clip = None
 
-    def make_clip(self, clip, start_time, end_time, fps= 29.97):
+    def make_clip(self, clips):
         """
         Slices a video file between two time frames to create a gif
         :param clip: Name of video file
         :param start_time: Tuple stating time in (hour, min, sec), (min, sec) or (sec)
         :param end_time: Tuple stating time in (hour, min, sec), (min, sec) or (sec)
         """
-        self.clip = VideoFileClip(clip).subclip(start_time, end_time).set_fps(fps)
+        self.clip = CompositeVideoClip(clips=clips)
 
     def resize(self, new_size):
         """
@@ -113,12 +113,11 @@ class videoClip:
         #              .subclip(self.clip.duration / 2, 3 * self.clip.duration / 2))
 
         self.clip.write_videofile(output)
-        self.clip.reader.close()
-        self.clip.audio.reader.close_proc()
+        # self.clip.reader.close()
+        # self.clip.audio.reader.close_proc()
 
 
-    # We shouldn't add text here.
-    # def add_text(self, text, font_size, color, font, interline, pos, duration):
-    #     text = TextClip(text, fontsize=font_size, color=color,
-    #                     font=font, interline=interline).set_pos(pos).set_duration(duration)
-    #     self.clip = CompositeVideoClip([self.clip, text])
+    def add_text(self, text, font_size, color, font, interline, pos, duration):
+        text = TextClip(text, fontsize=font_size, color=color,
+                        font=font, interline=interline).set_pos(pos).set_duration(duration)
+        self.clip = CompositeVideoClip([self.clip, text])
