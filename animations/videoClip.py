@@ -49,6 +49,11 @@ class videoClip:
 
         # If a preselected aspect ratio was selected.
         if aspectRatio:
+            if not x_center:
+                x_center = self.clip.w/2
+            if not y_center:
+                y_center = self.clip.h/2
+
             # Vertical/Phone ratio
             if aspectRatio == "vertical" or aspectRatio == "9:16" or aspectRatio == "phone":
                 self.clip = self.clip.crop(width=self.clip.h*9/16, height=self.clip.h,
