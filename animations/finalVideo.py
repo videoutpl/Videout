@@ -10,8 +10,10 @@ class finalVideo:
 
     def __init__(self):
         self.clip = None
+        self.cliplist = []
+        self.duration = 0
 
-    def make_clip(self, clips):
+    def start_clip(self, clips):
         """
         Slices a video file between two time frames to create a gif
         :param clip: Name of video file
@@ -19,6 +21,45 @@ class finalVideo:
         :param end_time: Tuple stating time in (hour, min, sec), (min, sec) or (sec)
         """
         self.clip = CompositeVideoClip(clips=clips)
+
+    def add_clip(self, clip):
+        """
+        Replace self.clip with a new CompositeVideoClip that starts with itself and the new clip.
+
+        Replaces self.clip with a new CompositeVideoClip with a new instance
+            of the same object, containing a list of clips that starts with
+            itself, and followed by the newly inserted clip object. The
+            clip object will start wherever it is designated to start independently,
+            so it will not necessarily play at the end of the existing video.
+        :param clip: Moviepy clip object
+        :return: None
+        """
+        self.clip = CompositeVideoClip(clips=[self.clip, clip])
+
+    def concatenate_clip(self, clip):
+        """
+        Adds a clip to the self.cliplist to be used with the build_clip method.
+        :param clip: Moviepy clip object
+        :return: None
+        """
+        self.cliplist.append(clip)
+
+    def build_clip(self):
+        '''
+        Build a final video clip by concatenating existing clips.
+
+        Builds a final video clip by going through the video clips in the
+            self.cliplist and adding them to the end of the current self.clip
+            CompositeVideoFile.
+        :return: None
+        '''
+        for clip in self.cliplist:
+            if self.duration is 0:
+                self.start_clip([clip.clip])
+                self.duration += clip.duration
+            else:
+                self.add_clip(clip.clip.set_start(self.duration))
+                self.duration += clip.duration
 
     def resize(self, new_size):
         """

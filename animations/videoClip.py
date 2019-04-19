@@ -10,6 +10,7 @@ class videoClip:
 
     def __init__(self):
         self.clip = None
+        self.duration = 0
 
     def make_clip(self, clip, start_time, end_time, fps= 29.97):
         """
@@ -19,6 +20,8 @@ class videoClip:
         :param end_time: Tuple stating time in (hour, min, sec), (min, sec) or (sec)
         """
         self.clip = VideoFileClip(clip).subclip(start_time, end_time).set_fps(fps)
+        self.duration = self.clip.duration
+
 
     def resize(self, new_size):
         """
