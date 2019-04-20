@@ -93,6 +93,18 @@ class BaseClip:
                                        x_center=x_center, y_center=y_center)
 
     def add_text(self, text, font_size, color, font, interline, pos, duration):
+        """
+        Add a layer of text over the selected clip.
+
+        :param text:
+        :param font_size:
+        :param color:
+        :param font:
+        :param interline:
+        :param pos:
+        :param duration:
+        :return:
+        """
         text = TextClip(text, fontsize=font_size, color=color,
                         font=font, interline=interline).set_pos(pos).set_duration(duration)
         self.clip = CompositeVideoClip([self.clip, text])

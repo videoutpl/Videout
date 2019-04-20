@@ -21,7 +21,7 @@ class finalVideo(BaseClip):
 
     def _start_clip(self, clip):
         """
-        Slices a video file between two time frames to create a gif
+        Initialize the self.clip to a compositeVideoClip of only one clip.
         :param clip: Name of video file
         """
         self.clip = CompositeVideoClip(clips=clip)
@@ -35,15 +35,15 @@ class finalVideo(BaseClip):
             itself, and followed by the newly inserted clip object. The
             clip object will start wherever it is designated to start independently,
             so it will not necessarily play at the end of the existing video.
-        :param clip: Moviepy clip object
+        :param clip: BaseClip object
         :return: None
         """
         self.clip = CompositeVideoClip(clips=[self.clip, clip])
 
     def concatenate_clip(self, clip):
         """
-        Adds a clip to the self.cliplist to be used with the build_clip method.
-        :param clip: Moviepy clip object
+        Adds a clip to the end of the current self.clip.
+        :param clip: BaseClip object
         :return: None
         """
         if self.duration is 0:
