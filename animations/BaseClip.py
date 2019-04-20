@@ -1,4 +1,5 @@
-from moviepy.editor import *
+from moviepy.editor import CompositeVideoClip, TextClip
+
 
 class BaseClip:
 
@@ -90,18 +91,6 @@ class BaseClip:
             self.clip = self.clip.crop(x1=x1, y1=y1, x2=x2, y2=y2,
                                        width=width, height=height,
                                        x_center=x_center, y_center=y_center)
-
-    # def writeClip(self, output):
-    #     # self.clip = self.clip.fx(concatenate([self.clip, self.clip.fx(vfx.time_mirror)]))
-    #     # self.clip = self.clip.crossfadein(self.clip.duration / 2)
-    #     # self.clip = (CompositeVideoClip([self.clip,
-    #     #                                  self.clip.set_start(self.clip.duration / 2),
-    #     #                                  self.clip.set_start(self.clip.duration)])
-    #     #              .subclip(self.clip.duration / 2, 3 * self.clip.duration / 2))
-    #
-    #     self.clip.write_videofile(output)
-    #     self.clip.reader.close()
-    #     self.clip.audio.reader.close_proc()
 
     def add_text(self, text, font_size, color, font, interline, pos, duration):
         text = TextClip(text, fontsize=font_size, color=color,
