@@ -116,3 +116,44 @@ class videoClip:
         text = TextClip(text, fontsize=font_size, color=color,
                         font=font, interline=interline).set_pos(pos).set_duration(duration)
         self.clip = CompositeVideoClip([self.clip, text])
+
+    def addAudioFromFile(self, audio, start_time, end_time):
+        """
+        Uses moviepy.audio.io.AudioFileClip module. from Doc:
+        An audio clip read from a sound file, or an array. The whole file is not loaded in memory.
+        Instead, only a portion is read and stored in memory. this portion includes frames before and after the
+        last frames read, so that it is fast to read the sound backward and forward.
+
+        :param audio: audio file taken from directory (mp3, wav, etc)
+        :return: adds audio to the clip being worked on (self.clip)
+
+
+        This method works with the clip that was made and is stored on self.clip, which means it will alter the
+        a clip that is already being made, not a new external clip. This is to avoid discrepancies when making
+        new clips with or without overlay audio.
+        """
+
+
+        thisAudio = AudioFileClip(audio)
+        changedAudio = thisAudio.subclip(start_time,end_time)
+        self.clip = self.clip.set_audio(changedAudio)
+
+    def addAudioFromClip(self, clipToExtract, start_time, end_time):
+
+        """
+        Instead of using an audio file like the method before this, it takes another video such as an mp4 file
+        and rips the audio out of it, converts it into an AudioClip, and overlays it on the clip that is
+        currently being worked on.
+
+        ****This DOES NOT work with clips made through the VideoFileClip() method, since they have been processed
+        as a different file type, and already have their own audio attribute. To access such, one just needs to call
+        'clip'.audio, clip being your target clip for audio extraction.
+
+        :param clipToExtract: video from directory (mp4, etc)
+        :return: adds audio to the clip being worked on (self.clip)
+
+        """
+
+        thisAudio = AudioFileClip(clipToExtract)
+        changedAudio = thisAudio.subclip(start_time, end_time)
+        self.clip = self.clip.set_audio(changedAudio)
