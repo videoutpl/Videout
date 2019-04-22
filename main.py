@@ -1,37 +1,48 @@
 import os
 
 from animations.gif import Gif
-from animations.videoClip import videoClip
+from animations.ClipClasses import videoClip, finalVideo, photoClip
+
 
 
 # This file is only used to test methods!!!!
 def main():
-    # aspectRatios=["vertical", "square", "letterbox", "widescreen", "cinemascope", "anamorphic", "DCI", "Digital IMAX"]
-    # for ratio in aspectRatios:
 
     clip = os.getenv('USERPROFILE') + '\\Videos\\llama_transformation.mp4'
-    vclip = videoClip()
+    clip2 = os.getenv('USERPROFILE') + '\\Videos\\TakeOnMe_Weezer.mp4'
     clipForAudio = os.getenv('USERPROFILE') + '\\Videos\\LoveIsWar.mp4'
     audio = os.getenv('USERPROFILE') + '\\Music\\InTheEnd.mp3'
-    vclip.make_clip(clip=clip, start_time=(0, 1), end_time=(0, 60), fps=23.98)
-    # vclip.resize(new_size=0.6)
-    #  vclip.add_text(text='In my nightmares\nI see rabbits.', font_size=30, color='white',
-    #               font='Amiri-Bold', interline=-10, pos=(20, 190), duration=vclip.clip.duration)
-    #  vclip.crop(aspectRatio=ratio)
+
+   
+    aspectRatios=["vertical", "square", "letterbox", "widescreen", "cinemascope", "anamorphic", "DCI", "Digital IMAX"]
+
+    # clip = os.getenv('USERPROFILE') + '\\Videos\\BuschMorning.mp4'
+
+    vclip = videoClip(clip=clip, start_time=(0, 1), end_time=(0, 60), fps=23.98)
+    vclip2 = videoClip(clip=clip2, start_time=(0, 74), end_time=(0, 130), fps=23.98)
+
+    # clip = os.getenv('USERPROFILE') + '\\Pictures\\VR.jpg'
+    # pclip =photoClip(image=clip, duration=10)
+
+    # vclip2.resize(2)
+    # pclip.resize(.3)
+
     vclip.addAudioFromClip(clipToExtract=clipForAudio, start_time=(5), end_time=(65.1))
-    vclip.writeClip(output='LlamasWithLW.mp4')
+    vclip2.addAudioFromFile(audio=audio, start_time=(0), end_time=(186.1))
 
-    clip2 = os.getenv('USERPROFILE') + '\\Videos\\TakeOnMe_Weezer.mp4'
-    vclip = videoClip()
-    vclip.make_clip(clip=clip2, start_time=(0, 74), end_time=(0, 260), fps=23.98)
-    # vclip.resize(new_size=0.6)
-    #  vclip.add_text(text='In my nightmares\nI see rabbits.', font_size=30, color='white',
-    #               font='Amiri-Bold', interline=-10, pos=(20, 190), duration=vclip.clip.duration)
-    #  vclip.crop(aspectRatio=ratio)
-    #  vclip.addAudioFromFile(audio)
-    vclip.addAudioFromFile(audio=audio, start_time=(0), end_time=(186.1))
-    vclip.writeClip(output='TakeOnMeLP.mp4')
+    final = finalVideo()
+    final.concatenate_clip(vclip)
+    final.concatenate_clip(vclip2)
+    # final.concatenate_clip(pclip)
 
+    final.crop(aspectRatio=aspectRatios[4])
+    final.add_text(text='In my nightmares\nI see rabbits.', font_size=30, color='white',
+                   font='Amiri-Bold', interline=-10, pos=(20, 190), duration=final.duration)
+
+    
+    final.writeVideo(filename=(aspectRatios[4] + 'Test.mp4'))
+
+    
 
 if __name__ == '__main__':
     main()
