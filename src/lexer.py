@@ -16,6 +16,8 @@ LETTERS_DIGITS = LETTERS + DIGITS
 
 #######################################
 # ERRORS
+# Each class works with a different type of error.
+# It is done to override the errors of python
 #######################################
 
 class Error:
@@ -68,6 +70,8 @@ class RTError(Error):
 
 #######################################
 # POSITION
+# Moves throught each character of the file/input
+# It also saves the position(index, line, column)
 #######################################
 
 class Position:
@@ -93,6 +97,7 @@ class Position:
 
 #######################################
 # TOKENS
+# List of tokens and keywords of the language
 #######################################
 
 TT_INT			= 'INT'
@@ -116,15 +121,12 @@ TT_GTE			= 'GTE'
 TT_EOF			= 'EOF'
 
 
-# TODO: Work with the internal methods for the video
-
-
 KEYWORDS = [
 	'var','and','or','not',
 	'if','elif','else','for',
-	'to','step','while','then'
-	'resize', 'addText', 'writeVID',
-	'createGIF'
+	'to','step','while','then',
+	'resize', 'addText', 'renderVID',
+	'renderGIF', 'by', 'from'
 ]
 
 class Token:
@@ -140,6 +142,7 @@ class Token:
 		if pos_end:
 			self.pos_end = pos_end.copy()
 
+#Checks if a tokens matches the specified one
 	def matches(self, type_, value):
 		return self.type == type_ and self.value == value
 
@@ -163,6 +166,7 @@ class Lexer:
 		self.pos.advance(self.current_char)
 		self.current_char = self.text[self.pos.idx] if self.pos.idx < len(self.text) else None
 
+#Makes each the tokens for the traversed charcters
 	def make_tokens(self):
 		tokens = []
 
@@ -213,6 +217,7 @@ class Lexer:
 		tokens.append(Token(TT_EOF, pos_start=self.pos))
 		return tokens, None
 
+	#Forms the number token. The same can be both INT OR FLOAT
 	def make_number(self):
 		num_str = ''
 		dot_count = 0
@@ -230,6 +235,7 @@ class Lexer:
 		else:
 			return Token(TT_FLOAT, float(num_str), pos_start, self.pos)
 
+# Make the identifier for a name
 	def make_identifier(self):
 		id_str = ''
 		pos_start = self.pos.copy()
@@ -241,6 +247,7 @@ class Lexer:
 		tok_type = TT_KEYWORD if id_str in KEYWORDS else TT_IDENTIFIER
 		return Token(tok_type, id_str, pos_start, self.pos)
 
+# Checks if the previews token is a ! to make it a NOTEQUALS
 	def make_not_equals(self):
 		pos_start = self.pos.copy()
 		self.advance()
@@ -252,6 +259,7 @@ class Lexer:
 		self.advance()
 		return None, ExpectedCharError(pos_start, self.pos, "'=' (after '!')")
 
+# If there are 2 equal tokens side by side..it makes the EE token
 	def make_equals(self):
 		tok_type = TT_EQ
 		pos_start = self.pos.copy()
@@ -263,6 +271,7 @@ class Lexer:
 
 		return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
 
+# Checks if the token is a <= or simply a <
 	def make_less_than(self):
 		tok_type = TT_LT
 		pos_start = self.pos.copy()
@@ -274,6 +283,7 @@ class Lexer:
 
 		return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
 
+# Checks if the tokens is a >= or a >
 	def make_greater_than(self):
 		tok_type = TT_GT
 		pos_start = self.pos.copy()
@@ -287,6 +297,8 @@ class Lexer:
 
 #######################################
 # NODES
+# The different nodes for each type of function that can be condition_node
+# with the langage
 #######################################
 
 class NumberNode:
@@ -313,6 +325,13 @@ class VarAssignNode:
 
 		self.pos_start = self.var_name_tok.pos_start
 		self.pos_end = self.value_node.pos_end
+
+class vidAssignNode:
+	def __init__(self, vid_name_tok):
+		self.vid_name_tok = vid_name_tok
+
+		self.pos_start = self.vid_name_tok.pos_start
+		self.pos_end = se;f.vid_name_tok.pos_end
 
 class BinOpNode:
 	def __init__(self, left_node, op_tok, right_node):
@@ -364,8 +383,10 @@ class WhileNode:
 		self.pos_start = self.condition_node.pos_start
 		self.pos_end = self.body_node.pos_end
 
+
 #######################################
 # PARSE RESULT
+# returns the results after being parse
 #######################################
 
 class ParseResult:
@@ -417,7 +438,7 @@ class Parser:
 		return res
 
 	###################################
-
+# Grammar Rule for the if statement
 	def if_expr(self):
 		res = ParseResult()
 		cases = []
@@ -477,6 +498,7 @@ class Parser:
 
 		return res.success(IfNode(cases, else_case))
 
+#Grammar Rule for the for loop
 	def for_expr(self):
 		res = ParseResult()
 
@@ -546,6 +568,7 @@ class Parser:
 
 		return res.success(ForNode(var_name, start_value, end_value, step_value, body))
 
+# Grammar rule for the while loop
 	def while_expr(self):
 		res = ParseResult()
 
@@ -575,6 +598,7 @@ class Parser:
 
 		return res.success(WhileNode(condition, body))
 
+# Symple assignments and expressions
 	def atom(self):
 		res = ParseResult()
 		tok = self.current_tok
@@ -624,9 +648,11 @@ class Parser:
 			"Expected int, float, identifier, '+', '-', '('"
 		))
 
+# Power rule
 	def power(self):
 		return self.bin_op(self.atom, (TT_POW, ), self.factor)
 
+# Number (positive or negative), can be either INT or FLOAT
 	def factor(self):
 		res = ParseResult()
 		tok = self.current_tok
@@ -639,13 +665,15 @@ class Parser:
 			return res.success(UnaryOpNode(tok, factor))
 
 		return self.power()
-
+# Result after a DIV or a MULT
 	def term(self):
 		return self.bin_op(self.factor, (TT_MUL, TT_DIV))
 
+#Arithmetic expressions rules
 	def arith_expr(self):
 		return self.bin_op(self.term, (TT_PLUS, TT_MINUS))
 
+#Comparison expressions rules
 	def comp_expr(self):
 		res = ParseResult()
 
@@ -668,6 +696,25 @@ class Parser:
 
 		return res.success(node)
 
+#Rule for video rendering
+	def renderVIDexp(self):
+		res = ParseResult()
+
+		if self.current_tok.matches(TT_KEYWORD, 'renderVID'):
+			res.register_advancement()
+			self.advance()
+
+			if self.current_tok.type != TT_IDENTIFIER:
+				retrn res.failure(InvalidSyntaxError(
+				self.current_tok.pos_start, self.current_tok.pos_end,
+				"Expected identifier"
+				))
+			vid_name = self.current_tok
+			if res.error : return res
+
+			return res.success(vidAssignNode(vid_name))
+
+# Rule for expressions
 	def expr(self):
 		res = ParseResult()
 
@@ -693,6 +740,7 @@ class Parser:
 
 			res.register_advancement()
 			self.advance()
+
 			expr = res.register(self.expr())
 			if res.error: return res
 			return res.success(VarAssignNode(var_name, expr))
@@ -702,7 +750,7 @@ class Parser:
 		if res.error:
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				"Expected 'var', int, float, identifier, '+', '-', '(', or 'not'"
+				"Expected 'var', int, float, identifier, '+', '-', '(' or 'not'"
 			))
 
 		return res.success(node)
@@ -752,6 +800,7 @@ class RTResult:
 # VALUES
 #######################################
 
+# original functions that are going to be called by the tokesn with numbers
 class Number:
 	def __init__(self, value):
 		self.value = value
@@ -766,19 +815,19 @@ class Number:
 	def set_context(self, context=None):
 		self.context = context
 		return self
-
+#PLUS
 	def added_to(self, other):
 		if isinstance(other, Number):
 			return Number(self.value + other.value).set_context(self.context), None
-
+#MINUS
 	def subbed_by(self, other):
 		if isinstance(other, Number):
 			return Number(self.value - other.value).set_context(self.context), None
-
+#MULT
 	def multed_by(self, other):
 		if isinstance(other, Number):
 			return Number(self.value * other.value).set_context(self.context), None
-
+#DIV
 	def dived_by(self, other):
 		if isinstance(other, Number):
 			if other.value == 0:
@@ -789,43 +838,43 @@ class Number:
 				)
 
 			return Number(self.value / other.value).set_context(self.context), None
-
+#POW
 	def powed_by(self, other):
 		if isinstance(other, Number):
 			return Number(self.value ** other.value).set_context(self.context), None
-
+#EQEQUALS
 	def get_comparison_eq(self, other):
 		if isinstance(other, Number):
 			return Number(int(self.value == other.value)).set_context(self.context), None
-
+#NOTEQUALS
 	def get_comparison_ne(self, other):
 		if isinstance(other, Number):
 			return Number(int(self.value != other.value)).set_context(self.context), None
-
+#LESSTHAN
 	def get_comparison_lt(self, other):
 		if isinstance(other, Number):
 			return Number(int(self.value < other.value)).set_context(self.context), None
-
+#GREATERTHAN
 	def get_comparison_gt(self, other):
 		if isinstance(other, Number):
 			return Number(int(self.value > other.value)).set_context(self.context), None
-
+#LESSTHANEQUAL
 	def get_comparison_lte(self, other):
 		if isinstance(other, Number):
 			return Number(int(self.value <= other.value)).set_context(self.context), None
-
+#GREATERTHANEQUAL
 	def get_comparison_gte(self, other):
 		if isinstance(other, Number):
 			return Number(int(self.value >= other.value)).set_context(self.context), None
-
+#AND
 	def anded_by(self, other):
 		if isinstance(other, Number):
 			return Number(int(self.value and other.value)).set_context(self.context), None
-
+#OR
 	def ored_by(self, other):
 		if isinstance(other, Number):
 			return Number(int(self.value or other.value)).set_context(self.context), None
-
+#BOOL
 	def notted(self):
 		return Number(1 if self.value == 0 else 0).set_context(self.context), None
 
@@ -834,7 +883,7 @@ class Number:
 		copy.set_pos(self.pos_start, self.pos_end)
 		copy.set_context(self.context)
 		return copy
-
+#TRUECHECK
 	def is_true(self):
 		return self.value != 0
 
@@ -854,6 +903,7 @@ class Context:
 
 #######################################
 # SYMBOL TABLE
+# TABLE THAT HOLDS ALL THE VARS ALREADY MADE
 #######################################
 
 class SymbolTable:
