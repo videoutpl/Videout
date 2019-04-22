@@ -1,11 +1,19 @@
-expr : term PLUS term*
+expr : KEYWORD: VAR IDENTIFIER EQ expr
+     | term PLUS term*
      | term MINUS term*
+
 
 term : factor MUL factor*
      | factor DIV factor*
 
-factor : INT
-       | FLOAT
-       | factor PLUS factor
-       | factor MINUS factor
+factor :
+       | PLUS factor
+       | MINUS factor
        |LPAREN expr RPAREN
+
+power : number (POW factor)*
+
+number : INT
+       | FLOAT
+       | IDENTIFIER
+       | LPAREN expr RPAREN
