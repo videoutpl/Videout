@@ -2,8 +2,8 @@ import lexer
 
 
 while True:
-    text = input('~~>')
+    text = input('bitch> ')
     result , error = lexer.run('<stdin>',text)
 
     if error : print(error.as_string())
-    else: print(result)
+    elif result: print(result)
