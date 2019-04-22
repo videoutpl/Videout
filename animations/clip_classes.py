@@ -53,22 +53,3 @@ class FinalVideo(BaseClip):
             self._add_clip(clip.clip.set_start(self.duration))
 
         self.duration += clip.duration
-
-    def write_video(self, filename):
-        """
-        Write the video to a file.
-        :param filename: name and format of output file.
-        :return:
-        """
-        self.clip.write_videofile(filename)
-
-    def create_gif(self, filename):
-        # TODO: gif that loops fluidly
-        # self.clip = self.clip.fx(concatenate([self.clip, self.clip.fx(vfx.time_mirror)]))
-        # self.clip = self.clip.crossfadein(self.clip.duration / 2)
-        # self.clip = (CompositeVideoClip([self.clip,
-        #                                  self.clip.set_start(self.clip.duration / 2),
-        #                                  self.clip.set_start(self.clip.duration)])
-        #              .subclip(self.clip.duration / 2, 3 * self.clip.duration / 2))
-
-        self.clip.write_gif(filename)

@@ -106,3 +106,15 @@ class BaseClip:
             self.clip = self.clip.crop(x1=x1, y1=y1, x2=x2, y2=y2,
                                        width=width, height=height,
                                        x_center=x_center, y_center=y_center)
+
+    def write_video(self, filename):
+        """
+        Write the video to a file.
+        :param filename: name and format of output file.
+        :return:
+        """
+        self.clip.write_videofile(filename)
+
+    def create_gif(self, filename):
+        # TODO: gif that loops fluidly
+        self.clip.write_gif(filename)

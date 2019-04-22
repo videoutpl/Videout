@@ -29,6 +29,7 @@ def main():
                    font='Amiri-Bold', interline=-10, pos=(20, 190), duration=final.duration)
 
     final.write_video(filename=(aspect_ratios[4] + 'Test.mp4'))
+    final.create_gif(filename="testgif.gif")
 
 
 if __name__ == '__main__':
