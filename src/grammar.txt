@@ -1,19 +1,21 @@
 expr : KEYWORD: VAR IDENTIFIER EQ expr
-     | term PLUS term*
-     | term MINUS term*
+     | comp-expr ((KEYWORD:and|KEYWORD:or) comp-expr)*
 
 
-term : factor MUL factor*
-     | factor DIV factor*
+comp-expr : not comp-expr
+          | arith_expr ((EE|LT|GT|LTE|GTE) arith_expr)*
 
-factor :
-       | PLUS factor
-       | MINUS factor
-       |LPAREN expr RPAREN
+arith-expr : term ((PLUS|MINUS) term)*
+
+
+term : factor ((MUL|DIV) factor)*
+
+factor : (PLUS|MINUS) factor
+       | power
 
 power : number (POW factor)*
 
-number : INT
-       | FLOAT
-       | IDENTIFIER
-       | LPAREN expr RPAREN
+atom : INT
+     | FLOAT
+     | IDENTIFIER
+     | LPAREN expr RPAREN
