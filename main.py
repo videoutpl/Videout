@@ -1,6 +1,5 @@
 import os
 
-from animations.gif import Gif
 from animations.ClipClasses import videoClip, finalVideo, photoClip
 
 
@@ -30,17 +29,18 @@ def main():
     vclip.addAudioFromClip(clipToExtract=clipForAudio, start_time=(5), end_time=(65.1))
     vclip2.addAudioFromFile(audio=audio, start_time=(0), end_time=(186.1))
 
-    final = finalVideo()
-    final.concatenate_clip(vclip)
-    final.concatenate_clip(vclip2)
+    # final = finalVideo()
+    # final.concatenate_clip(vclip)
+    # final.concatenate_clip(vclip2)
     # final.concatenate_clip(pclip)
 
-    final.crop(aspectRatio=aspectRatios[4])
-    final.add_text(text='In my nightmares\nI see rabbits.', font_size=30, color='white',
-                   font='Amiri-Bold', interline=-10, pos=(20, 190), duration=final.duration)
+    vclip.crop(aspectRatio=aspectRatios[4])
+    # final.add_text(text='In my nightmares\nI see rabbits.', font_size=30, color='white',
+    #                font='Amiri-Bold', interline=-10, pos=(20, 190), duration=final.duration)
 
     
-    final.writeVideo(filename=(aspectRatios[4] + 'Test.mp4'))
+    vclip.writeVideo(filename=(aspectRatios[4] + 'Test.mp4'))
+    vclip.create_gif(filename="testgif.gif")
 
     
 

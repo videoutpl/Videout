@@ -149,3 +149,16 @@ class BaseClip:
         thisAudio = AudioFileClip(clipToExtract)
         changedAudio = thisAudio.subclip(start_time, end_time)
         self.clip = self.clip.set_audio(changedAudio)
+        
+    def writeVideo(self, filename):
+        """
+        Write the video to a file.
+        :param filename: name and format of output file.
+        :return:
+        """
+        self.clip.write_videofile(filename)
+
+
+    def create_gif(self, filename):
+        # TODO: gif that loops fluidly
+        self.clip.write_gif(filename)
