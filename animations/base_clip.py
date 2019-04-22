@@ -1,12 +1,23 @@
-from moviepy.editor import *
+from moviepy.editor import CompositeVideoClip, TextClip
 
 
 class BaseClip:
 
-    def __init__(self):
-        self.clip = None
+    def __init__(self, clip):
+        self.clip = CompositeVideoClip(clips=[clip])
+        self.duration = self.clip.duration
 
     def add_text(self, text, font_size, color, font, interline, pos, duration):
+        """
+        Adds a layer of text over the selected clip.
+        :param text: text to add
+        :param font_size: size of text
+        :param color: color of text
+        :param font: font of text
+        :param interline: line spacing of text
+        :param pos: position of text
+        :param duration: duration text is going to be visible
+        """
         text = TextClip(text, fontsize=font_size, color=color,
                         font=font, interline=interline).set_pos(pos).set_duration(duration)
         self.clip = CompositeVideoClip([self.clip, text])
@@ -41,8 +52,10 @@ class BaseClip:
 
         # If a preselected aspect ratio was selected.
         if aspect_ratio:
-            x_center = self.clip.w / 2
-            y_center = self.clip.h / 2
+            if not x_center:
+                x_center = self.clip.w / 2
+            if not y_center:
+                y_center = self.clip.h / 2
 
             # Vertical/Phone ratio
             if aspect_ratio == "vertical" or aspect_ratio == "9:16" or aspect_ratio == "phone":
