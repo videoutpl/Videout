@@ -1,6 +1,5 @@
 import os
 
-from animations.gif import Gif
 from animations.ClipClasses import videoClip, finalVideo, photoClip
 
 
@@ -30,6 +29,7 @@ def main():
                    font='Amiri-Bold', interline=-10, pos=(20, 190), duration=final.duration)
 
     final.writeVideo(filename=(aspectRatios[4] + 'Test.mp4'))
+    final.create_gif(filename="testgif.gif")
 
 
 
