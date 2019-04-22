@@ -115,10 +115,16 @@ TT_LTE			= 'LTE'
 TT_GTE			= 'GTE'
 TT_EOF			= 'EOF'
 
+
+# TODO: Work with the internal methods for the video
+
+
 KEYWORDS = [
 	'var','and','or','not',
 	'if','elif','else','for',
 	'to','step','while','then'
+	'resize', 'addText', 'writeVID',
+	'createGIF'
 ]
 
 class Token:
@@ -696,7 +702,7 @@ class Parser:
 		if res.error:
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				"Expected 'var', int, float, identifier, '+', '-', '(' or 'not'"
+				"Expected 'var', int, float, identifier, '+', '-', '(', or 'not'"
 			))
 
 		return res.success(node)

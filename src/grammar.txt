@@ -1,4 +1,4 @@
-expr       : KEYWORD: VAR IDENTIFIER EQ expr
+expr       : KEYWORD:var IDENTIFIER EQ expr
            | comp-expr ((KEYWORD:AND|KEYWORD:OR) comp-expr)*
 
 
@@ -13,7 +13,7 @@ term       : factor ((MUL|DIV) factor)*
 factor     : (PLUS|MINUS) factor
            | power
 
-power      : number (POW factor)*
+power      : atom (POW factor)*
 
 atom       : INT
            | FLOAT
@@ -23,11 +23,11 @@ atom       : INT
            | for-expr
            | while-expr
 
-if-expr    : KEYWORD:IF expr KEYWORD:THEN expr
-           | (KEYWORD:ELIF expr KEYWORD:THEN expr)*
-           | (KEYWORD:ELSE expr)?
+if-expr    : KEYWORD:if expr KEYWORD:then expr
+           | (KEYWORD:elif expr KEYWORD:then expr)*
+           | (KEYWORD:else expr)?
 
-for-expr   : KEYWORD:FOR IDENTIFIER EQ expr KEYWORD:TO expr
-             (KEYWORD:STEP expr)? KEYWORD:THEN expr
+for-expr   : KEYWORD:for IDENTIFIER EQ expr KEYWORD:to expr
+             (KEYWORD:step expr)? KEYWORD:then expr
 
-while-expr : KEYWORD:WHILE expr KEYWORD:THEN expr
+while-expr : KEYWORD:while expr KEYWORD:then expr

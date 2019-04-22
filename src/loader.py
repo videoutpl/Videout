@@ -2,7 +2,7 @@ import lexer
 
 
 while True:
-    text = input('bitch> ')
+    text = input('--> ')
     result , error = lexer.run('<stdin>',text)
 
     if error : print(error.as_string())
