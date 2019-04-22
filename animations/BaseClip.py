@@ -108,3 +108,16 @@ class BaseClip:
         text = TextClip(text, fontsize=font_size, color=color,
                         font=font, interline=interline).set_pos(pos).set_duration(duration)
         self.clip = CompositeVideoClip([self.clip, text])
+
+    def writeVideo(self, filename):
+        """
+        Write the video to a file.
+        :param filename: name and format of output file.
+        :return:
+        """
+        self.clip.write_videofile(filename)
+
+
+    def create_gif(self, filename):
+        # TODO: gif that loops fluidly
+        self.clip.write_gif(filename)
