@@ -1,24 +1,12 @@
-# from moviepy.video.io.VideoFileClip import VideoFileClip
-# import moviepy.editor as mp
-from moviepy.editor import *
+from moviepy.editor import CompositeVideoClip, TextClip
 
 
-# IMAGEMAGICK_BINARY = r'C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe'
+class BaseClip:
 
+    def __init__(self, clip):
+        self.clip = CompositeVideoClip(clips=[clip])
+        self.duration = self.clip.duration
 
-class videoClip:
-
-    def __init__(self):
-        self.clip = None
-
-    def make_clip(self, clip, start_time, end_time, fps= 29.97):
-        """
-        Slices a video file between two time frames to create a gif
-        :param clip: Name of video file
-        :param start_time: Tuple stating time in (hour, min, sec), (min, sec) or (sec)
-        :param end_time: Tuple stating time in (hour, min, sec), (min, sec) or (sec)
-        """
-        self.clip = VideoFileClip(clip).subclip(start_time, end_time).set_fps(fps)
 
     def resize(self, new_size):
         """
@@ -49,6 +37,11 @@ class videoClip:
 
         # If a preselected aspect ratio was selected.
         if aspectRatio:
+            if not x_center:
+                x_center = self.clip.w/2
+            if not y_center:
+                y_center = self.clip.h/2
+
             # Vertical/Phone ratio
             if aspectRatio == "vertical" or aspectRatio == "9:16" or aspectRatio == "phone":
                 self.clip = self.clip.crop(width=self.clip.h*9/16, height=self.clip.h,
@@ -99,20 +92,19 @@ class videoClip:
                                        width=width, height=height,
                                        x_center=x_center, y_center=y_center)
 
-    def writeClip(self, output):
-        # self.clip = self.clip.fx(concatenate([self.clip, self.clip.fx(vfx.time_mirror)]))
-        # self.clip = self.clip.crossfadein(self.clip.duration / 2)
-        # self.clip = (CompositeVideoClip([self.clip,
-        #                                  self.clip.set_start(self.clip.duration / 2),
-        #                                  self.clip.set_start(self.clip.duration)])
-        #              .subclip(self.clip.duration / 2, 3 * self.clip.duration / 2))
-
-        self.clip.write_videofile(output)
-        self.clip.reader.close()
-        self.clip.audio.reader.close_proc()
-
-
     def add_text(self, text, font_size, color, font, interline, pos, duration):
+        """
+        Add a layer of text over the selected clip.
+
+        :param text:
+        :param font_size:
+        :param color:
+        :param font:
+        :param interline:
+        :param pos:
+        :param duration:
+        :return:
+        """
         text = TextClip(text, fontsize=font_size, color=color,
                         font=font, interline=interline).set_pos(pos).set_duration(duration)
         self.clip = CompositeVideoClip([self.clip, text])
