@@ -66,7 +66,7 @@ def t_STRING(t):
     return t
 
 def t_error(t):
-    raise mamba.exceptions.UnexpectedCharacter("Unexpected character '%s' at line %d" % (t.value[0], t.lineno))
+    raise exceptions.UnexpectedCharacter("Unexpected character '%s' at line %d" % (t.value[0], t.lineno))
 
 
 lexer = lex.lex()
