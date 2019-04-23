@@ -1,0 +1,53 @@
+expr       : KEYWORD:var IDENTIFIER EQ expr
+           | comp-expr ((KEYWORD:and|KEYWORD:or) comp-expr)*
+
+
+comp-expr  : not comp-expr
+           | arith_expr ((EE|LT|GT|LTE|GTE) arith_expr)*
+
+arith-expr : term ((PLUS|MINUS) term)*
+
+
+term       : factor ((MUL|DIV) factor)*
+
+factor     : (PLUS|MINUS) factor
+           | power
+
+power      : atom (POW factor)*
+
+atom       : INT
+           | FLOAT
+           | IDENTIFIER
+           | LPAREN expr RPAREN
+           | if-expr
+           | for-expr
+           | while-expr
+           | edit-vid
+
+video      : KEYWORD:renderVID IDENTIFIER
+           | edit-video
+
+GIF        : KEYWORD:renderGIF IDENTIFIER KEYWORD:from video
+           | edit-gif
+
+if-expr    : KEYWORD:if expr KEYWORD:then expr
+           | (KEYWORD:elif expr KEYWORD:then expr)*
+           | (KEYWORD:else expr)?
+
+for-expr   : KEYWORD:for IDENTIFIER EQ expr KEYWORD:to expr
+             (KEYWORD:step expr)? KEYWORD:then expr
+
+while-expr : KEYWORD:while expr KEYWORD:then expr
+
+edit-vid   : KEYWORD:resize IDENTIFIER factor KEYWORD:by factor
+           | KEYWORD:addText IDENTIFIER to IDENTIFIER
+
+
+
+KEYWORDS = [
+	'var','and','or','not',
+	'if','elif','else','for',
+	'to','step','while','then',
+	'resize', 'addText', 'renderVID',
+	'renderGIF', 'by', 'from'
+]
