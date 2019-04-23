@@ -331,13 +331,6 @@ class VarAssignNode:
 		self.pos_start = self.var_name_tok.pos_start
 		self.pos_end = self.value_node.pos_end
 
-class vidAssignNode:
-	def __init__(self, vid_name_tok):
-		self.vid_name_tok = vid_name_tok
-
-		self.pos_start = self.vid_name_tok.pos_start
-		self.pos_end = se;f.vid_name_tok.pos_end
-
 class BinOpNode:
 	def __init__(self, left_node, op_tok, right_node):
 		self.left_node = left_node
@@ -387,7 +380,6 @@ class WhileNode:
 
 		self.pos_start = self.condition_node.pos_start
 		self.pos_end = self.body_node.pos_end
-
 
 #######################################
 # PARSE RESULT
@@ -442,7 +434,8 @@ class Parser:
 			))
 		return res
 
-	###################################
+###################################
+
 # Grammar Rule for the if statement
 	def if_expr(self):
 		res = ParseResult()
@@ -647,7 +640,6 @@ class Parser:
 			while_expr = res.register(self.while_expr())
 			if res.error: return res
 			return res.success(while_expr)
-
 		return res.failure(InvalidSyntaxError(
 			tok.pos_start, tok.pos_end,
 			"Expected int, float, identifier, '+', '-', '('"
@@ -701,24 +693,6 @@ class Parser:
 
 		return res.success(node)
 
-# #Rule for video rendering
-# 	def renderVIDexp(self):
-# 		res = ParseResult()
-#
-# 		if self.current_tok.matches(TT_KEYWORD, 'renderVID'):
-# 			res.register_advancement()
-# 			self.advance()
-#
-# 			if self.current_tok.type != TT_IDENTIFIER:
-# 				return res.failure(InvalidSyntaxError(
-# 				self.current_tok.pos_start, self.current_tok.pos_end,
-# 				"Expected identifier"
-# 				))
-# 			vid_name = self.current_tok
-# 			if res.error : return res
-#
-# 			return res.success(vidAssignNode(vid_name))
-
 # Rule for expressions
 	def expr(self):
 		res = ParseResult()
@@ -750,19 +724,59 @@ class Parser:
 			if res.error: return res
 			return res.success(VarAssignNode(var_name, expr))
 
-		if self.current_tok.matches(TT_KEYWORD, 'renderVID'):
+		if self.current_tok.matches(TT_KEYWORD,'videoClip'):
+			res.register_advancement()
+			self.advance()
+
+			if self.current_tok.type != TT_LPAREN:
+				return res.failure(InvalidSyntaxError(
+				self.current_tok.pos_start, self.current_tok.pos_end,
+				f"Expected parenthesis '(' after videoClip"
+				))
+
 			res.register_advancement()
 			self.advance()
 
 			if self.current_tok.type != TT_IDENTIFIER:
 				return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				"Expected identifier"
+				f"Expected identifier"
 				))
-			vid_name = self.current_tok
-			if res.error : return res
 
-			return res.success(vidAssignNode(vid_name))
+			if self.current_tok.type != TT_INT:
+				return res.failure(InvalidSyntaxError(
+				self.current_tok.pos_start, self.current_tok.pos_end,
+				"Expected integer"
+				))
+
+			res.register_advancement()
+			self.advance()
+
+			if self.current_tok.type != TT_INT:
+				return res.failure(InvalidSyntaxError(
+				self.current_tok.pos_start, self.current_tok.pos_end,
+				"Expected integer"
+				))
+
+			res.register_advancement()
+			self.advance()
+
+			if self.current_tok.type != TT_FLOAT:
+				return res.failure(InvalidSyntaxError(
+				self.current_tok.pos_start, self.current_tok.pos_end,
+				"Expected float"
+				))
+
+			res.register_advancement()
+			self.advance()
+
+			if self.current_tok.type != TT_RPAREN:
+				return res.failure(InvalidSyntaxError(
+				self.current_tok.pos_start, self.current_tok.pos_end,
+				"Expected parenthesis ')' at end."
+				))
+
+
 
 		node = res.register(self.bin_op(self.comp_expr, ((TT_KEYWORD, 'and'), (TT_KEYWORD, 'or'))))
 
@@ -963,6 +977,8 @@ class Interpreter:
 			Number(node.tok.value).set_context(context).set_pos(node.pos_start, node.pos_end)
 		)
 
+
+	# Access the list of all made variables so far
 	def visit_VarAccessNode(self, node, context):
 		res = RTResult()
 		var_name = node.var_name_tok.value
@@ -978,6 +994,7 @@ class Interpreter:
 		value = value.copy().set_pos(node.pos_start, node.pos_end)
 		return res.success(value)
 
+	#Assigns a value to a variable and adds it to the global list of variables
 	def visit_VarAssignNode(self, node, context):
 		res = RTResult()
 		var_name = node.var_name_tok.value
@@ -1020,7 +1037,6 @@ class Interpreter:
 			result, error = left.anded_by(right)
 		elif node.op_tok.matches(TT_KEYWORD, 'or'):
 			result, error = left.ored_by(right)
-
 		if error:
 			return res.failure(error)
 		else:
@@ -1106,6 +1122,7 @@ class Interpreter:
 			if res.error: return res
 
 		return res.success(None)
+
 
 #######################################
 # RUN
