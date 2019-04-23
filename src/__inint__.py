@@ -1,7 +1,7 @@
 import time
 import parser as p
 import ast
-import environment
+import enviroment
 import exceptions
 import pprint
 import sys
