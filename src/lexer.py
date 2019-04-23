@@ -45,6 +45,7 @@ class InvalidSyntaxError(Error):
 	def __init__(self, pos_start, pos_end, details=''):
 		super().__init__(pos_start, pos_end, 'Invalid Syntax', details)
 
+#Runtime error
 class RTError(Error):
 	def __init__(self, pos_start, pos_end, details, context):
 		super().__init__(pos_start, pos_end, 'Runtime Error', details)
@@ -109,18 +110,18 @@ TT_MINUS    	= 'MINUS'
 TT_MUL      	= 'MUL'
 TT_DIV      	= 'DIV'
 TT_POW			= 'POW'
-TT_EQ			= 'EQ'
+TT_EQ			= 'EQ'      # Single equals
 TT_LPAREN   	= 'LPAREN'
 TT_RPAREN   	= 'RPAREN'
-TT_EE			= 'EE'
-TT_NE			= 'NE'
-TT_LT			= 'LT'
-TT_GT			= 'GT'
-TT_LTE			= 'LTE'
-TT_GTE			= 'GTE'
+TT_EE			= 'EE'      # Double equals (==)
+TT_NE			= 'NE' 		# Not equals (!=)
+TT_LT			= 'LT'	    # Less than
+TT_GT			= 'GT' 		# Greater than
+TT_LTE			= 'LTE' 	# Less than or equals
+TT_GTE			= 'GTE' 	# Greater than or equals
 TT_EOF			= 'EOF'
 
-
+# List of keywords used on the langage
 KEYWORDS = [
 	'var','and','or','not',
 	'if','elif','else','for',
@@ -129,6 +130,8 @@ KEYWORDS = [
 	'renderGIF', 'by', 'from'
 ]
 
+# Class that works with the tokens. It holds the position, type, value
+# It has a copy method
 class Token:
 	def __init__(self, type_, value=None, pos_start=None, pos_end=None):
 		self.type = type_
@@ -142,7 +145,7 @@ class Token:
 		if pos_end:
 			self.pos_end = pos_end.copy()
 
-#Checks if a tokens matches the specified one
+# Checks if a tokens matches the specified one
 	def matches(self, type_, value):
 		return self.type == type_ and self.value == value
 
@@ -170,7 +173,7 @@ class Lexer:
 	def make_tokens(self):
 		tokens = []
 
-		while self.current_char != None:
+		while self.current_char is not None:
 			if self.current_char in ' \t':
 				self.advance()
 			elif self.current_char in DIGITS:
@@ -217,13 +220,15 @@ class Lexer:
 		tokens.append(Token(TT_EOF, pos_start=self.pos))
 		return tokens, None
 
-	#Forms the number token. The same can be both INT OR FLOAT
+#Forms the number token. The same can be both INT OR FLOAT
 	def make_number(self):
 		num_str = ''
 		dot_count = 0
 		pos_start = self.pos.copy()
 
-		while self.current_char != None and self.current_char in DIGITS + '.':
+# Makes sure tha the character we are checking is indeed something (its not a None)
+#Also checks if there is a dot, to make the token FLOAT instead of INT.
+		while self.current_char is not None and self.current_char in DIGITS + '.':
 			if self.current_char == '.':
 				if dot_count == 1: break
 				dot_count += 1
@@ -696,23 +701,23 @@ class Parser:
 
 		return res.success(node)
 
-#Rule for video rendering
-	def renderVIDexp(self):
-		res = ParseResult()
-
-		if self.current_tok.matches(TT_KEYWORD, 'renderVID'):
-			res.register_advancement()
-			self.advance()
-
-			if self.current_tok.type != TT_IDENTIFIER:
-				retrn res.failure(InvalidSyntaxError(
-				self.current_tok.pos_start, self.current_tok.pos_end,
-				"Expected identifier"
-				))
-			vid_name = self.current_tok
-			if res.error : return res
-
-			return res.success(vidAssignNode(vid_name))
+# #Rule for video rendering
+# 	def renderVIDexp(self):
+# 		res = ParseResult()
+#
+# 		if self.current_tok.matches(TT_KEYWORD, 'renderVID'):
+# 			res.register_advancement()
+# 			self.advance()
+#
+# 			if self.current_tok.type != TT_IDENTIFIER:
+# 				return res.failure(InvalidSyntaxError(
+# 				self.current_tok.pos_start, self.current_tok.pos_end,
+# 				"Expected identifier"
+# 				))
+# 			vid_name = self.current_tok
+# 			if res.error : return res
+#
+# 			return res.success(vidAssignNode(vid_name))
 
 # Rule for expressions
 	def expr(self):
@@ -744,6 +749,20 @@ class Parser:
 			expr = res.register(self.expr())
 			if res.error: return res
 			return res.success(VarAssignNode(var_name, expr))
+
+		if self.current_tok.matches(TT_KEYWORD, 'renderVID'):
+			res.register_advancement()
+			self.advance()
+
+			if self.current_tok.type != TT_IDENTIFIER:
+				return res.failure(InvalidSyntaxError(
+				self.current_tok.pos_start, self.current_tok.pos_end,
+				"Expected identifier"
+				))
+			vid_name = self.current_tok
+			if res.error : return res
+
+			return res.success(vidAssignNode(vid_name))
 
 		node = res.register(self.bin_op(self.comp_expr, ((TT_KEYWORD, 'and'), (TT_KEYWORD, 'or'))))
 
@@ -889,6 +908,7 @@ class Number:
 
 	def __repr__(self):
 		return str(self.value)
+
 
 #######################################
 # CONTEXT
