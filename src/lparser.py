@@ -1,12 +1,13 @@
-import ply.yacc as yacc
 import ast
-from lexer import *
+
+from ply import yacc
 
 precedence = (
     ('left', 'NOT'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'MUL', 'DIV'),
 )
+
 
 def p_statement_list(p):
     '''
@@ -19,6 +20,7 @@ def p_statement_list(p):
         p[1].children.append(p[2])
         p[0] = p[1]
 
+
 def p_statement(p):
     '''
     statement : identifier
@@ -26,6 +28,7 @@ def p_statement(p):
               | if_statement
     '''
     p[0] = p[1]
+
 
 def p_primitive(p):
     '''
@@ -38,11 +41,13 @@ def p_primitive(p):
     else:
         p[0] = ast.Primitive(p[1])
 
+
 def p_boolean_operators(p):
     '''
     boolean : expression EQUALS expression
     '''
     p[0] = ast.BinaryOperation(p[1], p[3], p[2])
+
 
 def p_assignable(p):
     '''
@@ -51,11 +56,13 @@ def p_assignable(p):
     '''
     p[0] = p[1]
 
+
 def p_assign(p):
     '''
     expression : identifier SETTO assignable
     '''
     p[0] = ast.Assignment(p[1], p[3])
+
 
 def p_ifstatement(p):
     '''
@@ -63,13 +70,32 @@ def p_ifstatement(p):
     '''
     p[0] = ast.If(p[2], p[4])
 
+
 def p_ifstatement_else_if(p):
     '''
     if_statement : IF expression LPAREN statement_list RPAREN ELSE if_statement
     '''
     p[0] = ast.If(p[2], p[4], p[7])
 
+
 def p_in_expressions(p):
     '''
     expression : expression IN exprew
     '''
+
+
+parser = yacc.yacc()
+while True:
+    try:
+        s = input('VIDEOUT> ')
+    except EOFError:
+        break
+    if s == "exit":
+        input('Thanks for using BEAR! Press the enter key to exit.')
+        break
+    if s == 'help':
+        help()
+        continue
+    if not s:
+        continue
+result = parser.parse(s)
