@@ -1,7 +1,7 @@
 import operator
 from types import LambdaType
-from exceptions import *
-import symbol_table
+from  src.exceptions import *
+from src import symbol_table
 
 symbols = symbol_table.SymbolTable()
 

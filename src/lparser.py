@@ -1,6 +1,8 @@
 import ply.yacc as yacc
 import ast
-from lexer import *
+from animations import BaseClip, ClipClasses as vclip
+import os
+from src.lexer import *
 
 precedence = (
     ('left', 'NOT'),
@@ -73,3 +75,10 @@ def p_in_expressions(p):
     '''
     expression : expression IN exprew
     '''
+
+def p_create_video(p):
+
+    clip = os.getenv('USERPROFILE') + '\\Videos\\llama_transformation.mp4'
+    vclip.videoClip(clip=clip, start_time=(0, 1), end_time=(0, 60), fps=23.98)
+    vclip.writeVideo(filename=('Test.mp4'))
+    vclip.create_gif(filename="testgif.gif")

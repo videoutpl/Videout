@@ -1,8 +1,8 @@
 import time
 import parser as p
 import ast
-import environment
-import exceptions
+from src import enviroment
+from src import exceptions
 import pprint
 import sys
 
@@ -12,7 +12,7 @@ def execute(source, show_ast: bool=False, disable_warnings: bool=True):
 
     try:
         res = p.get_parser().parse(source)
-        environment.declare_env(ast.symbols)
+        enviroment.declare_env(ast.symbols)
 
         for node in res.children:
             node.eval()
