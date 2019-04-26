@@ -1,5 +1,6 @@
 import ply.lex as lex
 import ply.yacc as yacc
+from animations.ClipClasses import *
 import sys
 
 # Defining list of generic tokens in the language.
@@ -20,20 +21,20 @@ tokens = [
 # NOTE: this is done to match all strings and identify keywords afterwards
 # using a dictionary mapping.
 
-# TODO organize these entries.
 reserved = {
-    'video': 'VIDEO',
-    'photo': 'PHOTO',
-    'by' : 'BY',
-    'resize': 'RESIZE',
-    'trim': 'TRIM',
-    'from': 'FROM',
-    'to': 'TO',
-    'renderVid': 'RENDERVIDEO',
-    'renderGif': 'RENDERGIF'
+    'video'     : 'VIDEO',
+    'photo'     : 'PHOTO',
+    'resize'    : 'RESIZE',
+    'trim'      : 'TRIM',
+    'renderVid' : 'RENDERVIDEO',
+    'renderGif' : 'RENDERGIF',
+    'to'        : 'TO',
+    'by'        : 'BY',
+    'from'      : 'FROM',
+    'lasting'   : 'LASTING',
+    'and'       : 'AND',
+    'between'   : 'BETWEEN'
 }
-
-
 # Putting all tokens together.
 tokens += reserved.values()
 
@@ -46,7 +47,6 @@ tokens += reserved.values()
 t_ASSIGN = r'\='
 t_ignore = r' '
 t_COMMA = r'\,'
-# t_METHOD = r'\renderVid' #TODO add more methods
 
 
 # Elaborate rules requirirng functions to interpret values.
@@ -71,10 +71,8 @@ def t_INT(t):
 # Match any sequence starting with a letter or underscore,
 # followed by letters, underscores, or numbers.
 def t_STRING(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-
-    # If the string matched is a reserved word, match it to that.
-    if t.value in reserved:
+    r'[a-zA-Z_][a-zA-Z_0-9.]*'
+    if t.value in reserved:  # If the string matched is a reserved word, match it to that.
         t.type = reserved[t.value]
     else:
         t.type = 'STRING'
@@ -86,26 +84,15 @@ def t_error(t):
     print('Illegal characters:' + str(t))
     t.lexer.skip(1)
 
-#======================================================================================
+
 # Instantiating the lexer
 lexer = lex.lex()
 
-# # Passing the lexer a test input.
-# lexer.input("video renderVid = world 52.254 ")
-#
-# # Test loop to evaluate the test input.
-# while True:
-#     current_token = lexer.token() #current_token is the current token the lexer is looking at.
-#     if not current_token: # break if it is null/empty
-#         break
-#     print(current_token) # If not empty, print it.
-
-
+# ======================================================================================
 # Defining parser methods
 
-# Starting parser method.
 # NOTE: language grammar rules must be written as the docstring for these methods.
-# the 'p' parameter is a python tuple.
+# The 'p' parameter is a python tuple, interpreted as a tree.
 
 # NOTE: p[0] represents the nonterminal on the left of the colon ":"
 # p[1->n] are the terminals/nonterminals to the right of the colon.
@@ -114,24 +101,60 @@ lexer = lex.lex()
 
 # NOTE: will cause errors trying to build parser if grammar contains terminals/nonterminals
 # that have not yet been implemented.
-def p_videout(p):
+
+
+def p_videout(p): # Starting parser method.
     '''
      videout : methodcall
+             | var_assign
              | empty
     '''
-
-# todo add assignments as an option and implement them.
     # Print p[1] for testing
-    print(p[1])
+    print(run(p[1]))
+
+
+def p_var_assign(p): # Assign Variables.
+    '''
+    var_assign : STRING ASSIGN Init
+               | STRING ASSIGN STRING
+    '''
+
+    if type(p[3]) is tuple:
+        p[0] = (p[2], p[1], p[3])
+    else:
+        p[0] = (p[2], p[1], ('var', p[3]))
+
 
 def p_methodcall(p):
     '''
     methodcall : resizemethod
                | trimmethod
+               | renderVideo
 
     '''
     p[0] = p[1]
 #TODO add more method calls and implementations.
+
+
+
+def p_init(p):
+    '''
+    Init : videoInit
+         | photoInit
+    '''
+    p[0]= p[1]
+
+def p_videoInit(p):
+    '''
+    videoInit : VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT
+    '''
+    p[0] = (p[1], p[3], p[5], p[7], p[9], p[11])
+
+def p_photoInit(p):
+    '''
+    photoInit : PHOTO FROM STRING LASTING INT
+    '''
+    p[0] = (p[1], p[3], p[5])
 
 
 def p_resizemethod(p):
@@ -141,11 +164,18 @@ def p_resizemethod(p):
     '''
     p[0] = (p[1], p[2], p[4])
 
-def p_trimmethod(p):
+def p_trimmethod(p): # Doesn't currently exist in other methods.
     '''
     trimmethod : TRIM STRING FROM INT COMMA INT TO INT COMMA INT
     '''
-    p[0] = (p[1], p[2], p[4], p[6], p[8], p[10])
+    p[0] = (p[1], ('var', p[2]), p[4], p[6], p[8], p[10])
+
+
+def p_renderVideo(p):
+    '''
+    renderVideo : RENDERVIDEO STRING
+    '''
+    p[0] = (p[1], ('var', p[2]))
 
 # Define what an emtpy terminal is.
 def p_empty(p):
@@ -154,14 +184,48 @@ def p_empty(p):
     '''
     p[0] = None
 
+def p_error(p):
+    print("Syntax error found!")
+
 
 # Instantiate parser.
 parser = yacc.yacc()
 
+# Global dictionary to hold all variables created or modified within the run method.
+env = {}
+
+# This method essentially runs all parser code.
+def run(p):
+    # If what the run method is getting is a tuple, evaluate it's contents.
+    global env
+
+    if type(p) is tuple:  # Check the first item in the tuple to determine what to do.
+
+       # Handle variable assignment and retrieval.
+        if p[0] == '=':
+            env[p[1]] = run(p[2])
+        elif p[0] == 'var':
+            if p[1] not in env:
+                return "Undeclared variable found!"
+            else:
+                return env[p[1]]
+
+        elif p[0] == 'video':
+            return videoClip(clip= p[1], start_time=(p[2],p[3]), end_time=(p[4], p[5]))
+
+
+        elif p[0] == 'renderVid':
+            final_out = run(p[1])
+            final_out.writeVideo("renderedVideo.mp4")
+
+    else:
+        return p
+    print(p)
+
 # Perpetual reading from the console
 while True:
     try:
-        input_string = input('')
+        input_string = input('>>')
     except EOFError: # If you click Ctrl+D, stop reading from console.
         break
     parser.parse(input_string)
