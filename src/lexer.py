@@ -336,7 +336,7 @@ class vidAssignNode:
 		self.vid_name_tok = vid_name_tok
 
 		self.pos_start = self.vid_name_tok.pos_start
-		self.pos_end = se;f.vid_name_tok.pos_end
+		self.pos_end = self.vid_name_tok.pos_end
 
 class BinOpNode:
 	def __init__(self, left_node, op_tok, right_node):
