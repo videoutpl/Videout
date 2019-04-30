@@ -1,6 +1,6 @@
-import ply.yacc as yacc
 import ast
-from lexer import *
+
+from ply import yacc
 
 disable_warning = False
 
@@ -9,6 +9,7 @@ precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'MUL', 'DIV'),
 )
+
 
 def p_statement_list(p):
     '''
@@ -21,6 +22,7 @@ def p_statement_list(p):
         p[1].children.append(p[2])
         p[0] = p[1]
 
+
 def p_statement(p):
     '''
     statement : identifier
@@ -28,6 +30,7 @@ def p_statement(p):
               | if_statement
     '''
     p[0] = p[1]
+
 
 def p_primitive(p):
     '''
@@ -40,6 +43,7 @@ def p_primitive(p):
     else:
         p[0] = ast.Primitive(p[1])
 
+<<<<<<< HEAD
 def p_binary_op(p):
     '''
     expression : expression PLUS expressions
@@ -48,12 +52,15 @@ def p_binary_op(p):
                |expresison DIV expresison
     '''
     p[0] = ast.BinaryOperation(p[1],p[3],p[2])
+=======
+>>>>>>> 70120823515d1dc79c64bbaa04f0ee7475ca754d
 
 def p_boolean_operators(p):
     '''
     boolean : expression EQUALS expression
     '''
     p[0] = ast.BinaryOperation(p[1], p[3], p[2])
+
 
 def p_assignable(p):
     '''
@@ -62,11 +69,13 @@ def p_assignable(p):
     '''
     p[0] = p[1]
 
+
 def p_assign(p):
     '''
     expression : identifier SETTO assignable
     '''
     p[0] = ast.Assignment(p[1], p[3])
+
 
 def p_ifstatement(p):
     '''
@@ -74,16 +83,19 @@ def p_ifstatement(p):
     '''
     p[0] = ast.If(p[2], p[4])
 
+
 def p_ifstatement_else_if(p):
     '''
     if_statement : IF expression LPAREN statement_list RPAREN ELSE if_statement
     '''
     p[0] = ast.If(p[2], p[4], p[7])
 
+
 def p_in_expressions(p):
     '''
     expression : expression IN exprew
     '''
+<<<<<<< HEAD
     if len(p) = 4:
         p[0] = ast.InExpression(p[1],p[3])
     else:
@@ -109,3 +121,22 @@ def p_error(p):
 
 def get_parse():
     return yacc.yacc(errorlog=yacc.NullLogger()) if disable_warning else yacc.yacc()
+=======
+
+
+parser = yacc.yacc()
+while True:
+    try:
+        s = input('VIDEOUT> ')
+    except EOFError:
+        break
+    if s == "exit":
+        input('Thanks for using BEAR! Press the enter key to exit.')
+        break
+    if s == 'help':
+        help()
+        continue
+    if not s:
+        continue
+result = parser.parse(s)
+>>>>>>> 70120823515d1dc79c64bbaa04f0ee7475ca754d

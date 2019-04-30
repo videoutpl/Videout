@@ -125,9 +125,8 @@ class BaseClip:
         new clips with or without overlay audio.
         """
 
-
         thisAudio = AudioFileClip(audio)
-        changedAudio = thisAudio.subclip(start_time,end_time)
+        changedAudio = thisAudio.subclip(start_time, end_time)
         self.clip = self.clip.set_audio(changedAudio)
 
     def addAudioFromClip(self, clipToExtract, start_time, end_time):
@@ -149,7 +148,7 @@ class BaseClip:
         thisAudio = AudioFileClip(clipToExtract)
         changedAudio = thisAudio.subclip(start_time, end_time)
         self.clip = self.clip.set_audio(changedAudio)
-        
+
     def writeVideo(self, filename):
         """
         Write the video to a file.
@@ -157,7 +156,6 @@ class BaseClip:
         :return:
         """
         self.clip.write_videofile(filename)
-
 
     def create_gif(self, filename):
         # TODO: gif that loops fluidly

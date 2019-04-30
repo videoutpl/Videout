@@ -1,10 +1,11 @@
-import os
-from timeit import default_timer
 import ast
-import symbol_table
-import math
+import os
 import random
 import sys
+from timeit import default_timer
+
+import math
+import symbol_table
 
 
 def substr(s: str, start: int, length: int):
@@ -42,20 +43,26 @@ def array_reverse(arr: list):
 def array_sort(arr: list):
     arr.sort()
 
+
 def file_close(f):
     f.close()
+
 
 def file_write(f, data):
     f.write(data)
 
-def file_read(f, size = None):
+
+def file_read(f, size=None):
     return f.read(size)
+
 
 def file_seek(f, offset):
     return f.seek(offset)
 
+
 def file_pos(f):
     return f.tell()
+
 
 def file_exists(f):
     return os.path.isfile(f)
