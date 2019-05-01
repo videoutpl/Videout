@@ -1,14 +1,15 @@
 import ast
+from lexer import tokens
 
 from ply import yacc
 
 disable_warning = False
 
-precedence = (
-    ('left', 'NOT'),
-    ('left', 'PLUS', 'MINUS'),
-    ('left', 'MUL', 'DIV'),
-)
+# precedence = (
+#     ('left', 'NOT'),
+#     ('left', 'PLUS', 'MINUS'),
+#     ('left', 'MUL', 'DIV'),
+# )
 
 
 def p_statement_list(p):
@@ -43,17 +44,15 @@ def p_primitive(p):
     else:
         p[0] = ast.Primitive(p[1])
 
-<<<<<<< HEAD
 def p_binary_op(p):
     '''
     expression : expression PLUS expressions
                | expression MINUS expression
                | expression MULT expresison
-               |expresison DIV expresison
+               | expresison DIV expresison
     '''
     p[0] = ast.BinaryOperation(p[1],p[3],p[2])
-=======
->>>>>>> 70120823515d1dc79c64bbaa04f0ee7475ca754d
+
 
 def p_boolean_operators(p):
     '''
@@ -95,8 +94,7 @@ def p_in_expressions(p):
     '''
     expression : expression IN exprew
     '''
-<<<<<<< HEAD
-    if len(p) = 4:
+    if len(p) == 4:
         p[0] = ast.InExpression(p[1],p[3])
     else:
         p[0] = ast.InExpression(p[1],p[4],True)
@@ -121,7 +119,6 @@ def p_error(p):
 
 def get_parse():
     return yacc.yacc(errorlog=yacc.NullLogger()) if disable_warning else yacc.yacc()
-=======
 
 
 parser = yacc.yacc()
@@ -139,4 +136,3 @@ while True:
     if not s:
         continue
 result = parser.parse(s)
->>>>>>> 70120823515d1dc79c64bbaa04f0ee7475ca754d

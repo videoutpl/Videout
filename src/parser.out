@@ -1,0 +1,97 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ADD_AUDIO
+    ADD_TEXT
+    ASPECT_RATIO
+    ASSIGN
+    COMMA
+    CROP
+    EXTRACT_AUDIO
+    FLOAT
+    IDENTIFIER
+    INT
+    KEYWORD
+    POSITION
+    RENDER_GIF
+    RENDER_VID
+    RESIZE
+    TRIM
+
+Grammar
+
+Rule 0     S' -> statement_list
+Rule 1     statement_list -> statement
+Rule 2     statement_list -> statement_list statement
+Rule 3     statement -> identifier
+Rule 4     statement -> expression
+Rule 5     statement -> if_statement
+Rule 6     primitive -> NUM_INT
+Rule 7     primitive -> NUM_FLOAT
+Rule 8     primitive -> STRING
+Rule 9     expression -> expression PLUS expressions
+Rule 10    expression -> expression MINUS expression
+Rule 11    expression -> expression MULT expresison
+Rule 12    expression -> expresison DIV expresison
+Rule 13    boolean -> expression EQUALS expression
+Rule 14    assignable -> primitive
+Rule 15    assignable -> expression
+Rule 16    expression -> identifier SETTO assignable
+Rule 17    if_statement -> IF expression LPAREN statement_list RPAREN
+Rule 18    if_statement -> IF expression LPAREN statement_list RPAREN ELSE if_statement
+Rule 19    expression -> expression IN exprew
+Rule 20    expression -> primitive
+Rule 21    expression -> STRING
+Rule 22    expression -> identifier
+Rule 23    statement -> RETURN expression
+
+Terminals, with rules where they appear
+
+ADD_AUDIO            : 
+ADD_TEXT             : 
+ASPECT_RATIO         : 
+ASSIGN               : 
+COMMA                : 
+CROP                 : 
+EXTRACT_AUDIO        : 
+FLOAT                : 
+IDENTIFIER           : 
+INT                  : 
+KEYWORD              : 
+LPAREN               : 17 18
+POSITION             : 
+RENDER_GIF           : 
+RENDER_VID           : 
+RESIZE               : 
+RPAREN               : 17 18
+STRING               : 8 21
+TRIM                 : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+DIV                  : 12
+ELSE                 : 18
+EQUALS               : 13
+IF                   : 17 18
+IN                   : 19
+MINUS                : 10
+MULT                 : 11
+NUM_FLOAT            : 7
+NUM_INT              : 6
+PLUS                 : 9
+RETURN               : 23
+SETTO                : 16
+assignable           : 16
+boolean              : 
+expresison           : 11 12 12
+expression           : 4 9 10 10 11 13 13 15 17 18 19 23
+expressions          : 9
+exprew               : 19
+identifier           : 3 16 22
+if_statement         : 5 18
+primitive            : 14 20
+statement            : 1 2
+statement_list       : 2 17 18 0
+
