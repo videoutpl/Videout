@@ -1,7 +1,9 @@
 import ply.lex as lex
 
-# List of token names
-tokens = (
+# Defining list of generic tokens in the language.
+# NOTE: Ply's Lexer will use the list named "tokens" to tokenize
+# automatically based on the regex rules they have.
+tokens = [
     'INT',
     'FLOAT',
     'IDENTIFIER',
@@ -11,19 +13,41 @@ tokens = (
     'RPAREN',
     'ASPECT_RATIO',
     'COMMA',
-    'RESIZE',
-    'CROP',
-    'TRIM',
     'KEYWORD',
     'EXTRACT_AUDIO',
-    'ADD_AUDIO',
-    'ADD_TEXT',
-    'POSITION',
-    'RENDER_GIF',
-    'RENDER_VID'
-)
+    'METHOD',
+    'DELIMITERS'
+]
 
-# Regular expresion rules for simple tokens
+# Defining dictionary of specific reserved words and their token values.
+# NOTE: this is done to match all strings and identify keywords afterwards
+# using a dictionary mapping.
+reserved = {
+    'video'     : 'VIDEO',
+    'photo'     : 'PHOTO',
+    'resize'    : 'RESIZE',
+    'trim'      : 'TRIM',
+    'renderVid' : 'RENDERVIDEO',
+    'renderGif' : 'RENDERGIF',
+    'to'        : 'TO',
+    'by'        : 'BY',
+    'from'      : 'FROM',
+    'lasting'   : 'LASTING',
+    'and'       : 'AND',
+    'between'   : 'BETWEEN',
+    'position'  : 'POSITION',
+    'addText'   : "ADDTEXT",
+    'addAudio'  : 'ADDAUDIO',
+    'crop'      : 'CROP'
+}
+
+tokens += reserved.values()
+# =================================================================================
+# Defining rules for lex to interpret tokens.
+
+# Simple rules.
+# NOTE: Ply's lexer maps the regex of anything preceded by "t_"
+# to the token that follows it.
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA = ','
@@ -127,19 +151,19 @@ def t_error(t):
 
 lexer = lex.lex()
 #
-# Test it out
-data = 'resize clip by 0.6 ' \
-       'crop clip to cinemascope ' \
-       'Clip1 = video from "test.mp4" between 2, 30 and 2, 45 ' \
-       'trim clip from 1, 30 to 2, 50 ' \
-       'Music = extractAudio from "test2.mp4" between 0, 10 and 0, 45 ' \
-       'addAudio Music to Clip1 ' \
-       'addText "Text" between 4, 50 and 5, 0 at center ' \
-       'renderGif Clip1 ' \
-       'renderVid Clip1'
-
-# Give the lexer some input
-lexer.input(data)
-
-for tok in lexer:
-    print(tok)
+# # Test it out
+# data = 'resize clip by 0.6 ' \
+#        'crop clip to cinemascope ' \
+#        'Clip1 = video from "test.mp4" between 2, 30 and 2, 45 ' \
+#        'trim clip from 1, 30 to 2, 50 ' \
+#        'Music = extractAudio from "test2.mp4" between 0, 10 and 0, 45 ' \
+#        'addAudio Music to Clip1 ' \
+#        'addText "Text" between 4, 50 and 5, 0 at center ' \
+#        'renderGif Clip1 ' \
+#        'renderVid Clip1'
+#
+# # Give the lexer some input
+# lexer.input(data)
+#
+# for tok in lexer:
+#     print(tok)

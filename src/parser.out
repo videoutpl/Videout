@@ -2,96 +2,576 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    ADD_AUDIO
-    ADD_TEXT
+    ADDAUDIO
     ASPECT_RATIO
-    ASSIGN
-    COMMA
     CROP
+    DELIMITERS
     EXTRACT_AUDIO
-    FLOAT
-    IDENTIFIER
-    INT
     KEYWORD
-    POSITION
-    RENDER_GIF
-    RENDER_VID
-    RESIZE
-    TRIM
+    LPAREN
+    METHOD
+    RPAREN
 
 Grammar
 
-Rule 0     S' -> statement_list
-Rule 1     statement_list -> statement
-Rule 2     statement_list -> statement_list statement
-Rule 3     statement -> identifier
-Rule 4     statement -> expression
-Rule 5     statement -> if_statement
-Rule 6     primitive -> NUM_INT
-Rule 7     primitive -> NUM_FLOAT
-Rule 8     primitive -> STRING
-Rule 9     expression -> expression PLUS expressions
-Rule 10    expression -> expression MINUS expression
-Rule 11    expression -> expression MULT expresison
-Rule 12    expression -> expresison DIV expresison
-Rule 13    boolean -> expression EQUALS expression
-Rule 14    assignable -> primitive
-Rule 15    assignable -> expression
-Rule 16    expression -> identifier SETTO assignable
-Rule 17    if_statement -> IF expression LPAREN statement_list RPAREN
-Rule 18    if_statement -> IF expression LPAREN statement_list RPAREN ELSE if_statement
-Rule 19    expression -> expression IN exprew
-Rule 20    expression -> primitive
-Rule 21    expression -> STRING
-Rule 22    expression -> identifier
-Rule 23    statement -> RETURN expression
+Rule 0     S' -> videout
+Rule 1     videout -> var_assign
+Rule 2     videout -> methodcall
+Rule 3     videout -> empty
+Rule 4     var_assign -> IDENTIFIER ASSIGN Init
+Rule 5     var_assign -> IDENTIFIER ASSIGN STRING
+Rule 6     var_assign -> IDENTIFIER ASSIGN NUMBER
+Rule 7     Init -> videoInit
+Rule 8     Init -> photoInit
+Rule 9     videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT
+Rule 10    photoInit -> PHOTO FROM STRING LASTING INT
+Rule 11    methodcall -> resizemethod
+Rule 12    methodcall -> trimmethod
+Rule 13    methodcall -> renderVideo
+Rule 14    methodcall -> addText
+Rule 15    methodcall -> renderGif
+Rule 16    resizemethod -> RESIZE IDENTIFIER BY NUMBER
+Rule 17    trimmethod -> TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER
+Rule 18    addText -> ADDTEXT TO IDENTIFIER TO POSITION
+Rule 19    renderVideo -> RENDERVIDEO IDENTIFIER
+Rule 20    renderGif -> RENDERGIF FROM IDENTIFIER
+Rule 21    NUMBER -> INT
+Rule 22    NUMBER -> FLOAT
+Rule 23    empty -> <empty>
 
 Terminals, with rules where they appear
 
-ADD_AUDIO            : 
-ADD_TEXT             : 
+ADDAUDIO             : 
+ADDTEXT              : 18
+AND                  : 9
 ASPECT_RATIO         : 
-ASSIGN               : 
-COMMA                : 
+ASSIGN               : 4 5 6
+BETWEEN              : 9
+BY                   : 16
+COMMA                : 9 9 17 17
 CROP                 : 
+DELIMITERS           : 
 EXTRACT_AUDIO        : 
-FLOAT                : 
-IDENTIFIER           : 
-INT                  : 
+FLOAT                : 22
+FROM                 : 9 10 17 20
+IDENTIFIER           : 4 5 6 16 17 18 19 20
+INT                  : 9 9 9 9 10 21
 KEYWORD              : 
-LPAREN               : 17 18
-POSITION             : 
-RENDER_GIF           : 
-RENDER_VID           : 
-RESIZE               : 
-RPAREN               : 17 18
-STRING               : 8 21
-TRIM                 : 
+LASTING              : 10
+LPAREN               : 
+METHOD               : 
+PHOTO                : 10
+POSITION             : 18
+RENDERGIF            : 20
+RENDERVIDEO          : 19
+RESIZE               : 16
+RPAREN               : 
+STRING               : 5 9 10
+TO                   : 17 18 18
+TRIM                 : 17
+VIDEO                : 9
 error                : 
 
 Nonterminals, with rules where they appear
 
-DIV                  : 12
-ELSE                 : 18
-EQUALS               : 13
-IF                   : 17 18
-IN                   : 19
-MINUS                : 10
-MULT                 : 11
-NUM_FLOAT            : 7
-NUM_INT              : 6
-PLUS                 : 9
-RETURN               : 23
-SETTO                : 16
-assignable           : 16
-boolean              : 
-expresison           : 11 12 12
-expression           : 4 9 10 10 11 13 13 15 17 18 19 23
-expressions          : 9
-exprew               : 19
-identifier           : 3 16 22
-if_statement         : 5 18
-primitive            : 14 20
-statement            : 1 2
-statement_list       : 2 17 18 0
+Init                 : 4
+NUMBER               : 6 16 17 17 17 17
+addText              : 14
+empty                : 3
+methodcall           : 2
+photoInit            : 8
+renderGif            : 15
+renderVideo          : 13
+resizemethod         : 11
+trimmethod           : 12
+var_assign           : 1
+videoInit            : 7
+videout              : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . videout
+    (1) videout -> . var_assign
+    (2) videout -> . methodcall
+    (3) videout -> . empty
+    (4) var_assign -> . IDENTIFIER ASSIGN Init
+    (5) var_assign -> . IDENTIFIER ASSIGN STRING
+    (6) var_assign -> . IDENTIFIER ASSIGN NUMBER
+    (11) methodcall -> . resizemethod
+    (12) methodcall -> . trimmethod
+    (13) methodcall -> . renderVideo
+    (14) methodcall -> . addText
+    (15) methodcall -> . renderGif
+    (23) empty -> .
+    (16) resizemethod -> . RESIZE IDENTIFIER BY NUMBER
+    (17) trimmethod -> . TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER
+    (19) renderVideo -> . RENDERVIDEO IDENTIFIER
+    (18) addText -> . ADDTEXT TO IDENTIFIER TO POSITION
+    (20) renderGif -> . RENDERGIF FROM IDENTIFIER
+
+    IDENTIFIER      shift and go to state 5
+    $end            reduce using rule 23 (empty -> .)
+    RESIZE          shift and go to state 11
+    TRIM            shift and go to state 12
+    RENDERVIDEO     shift and go to state 13
+    ADDTEXT         shift and go to state 14
+    RENDERGIF       shift and go to state 15
+
+    videout                        shift and go to state 1
+    var_assign                     shift and go to state 2
+    methodcall                     shift and go to state 3
+    empty                          shift and go to state 4
+    resizemethod                   shift and go to state 6
+    trimmethod                     shift and go to state 7
+    renderVideo                    shift and go to state 8
+    addText                        shift and go to state 9
+    renderGif                      shift and go to state 10
+
+state 1
+
+    (0) S' -> videout .
+
+
+
+state 2
+
+    (1) videout -> var_assign .
+
+    $end            reduce using rule 1 (videout -> var_assign .)
+
+
+state 3
+
+    (2) videout -> methodcall .
+
+    $end            reduce using rule 2 (videout -> methodcall .)
+
+
+state 4
+
+    (3) videout -> empty .
+
+    $end            reduce using rule 3 (videout -> empty .)
+
+
+state 5
+
+    (4) var_assign -> IDENTIFIER . ASSIGN Init
+    (5) var_assign -> IDENTIFIER . ASSIGN STRING
+    (6) var_assign -> IDENTIFIER . ASSIGN NUMBER
+
+    ASSIGN          shift and go to state 16
+
+
+state 6
+
+    (11) methodcall -> resizemethod .
+
+    $end            reduce using rule 11 (methodcall -> resizemethod .)
+
+
+state 7
+
+    (12) methodcall -> trimmethod .
+
+    $end            reduce using rule 12 (methodcall -> trimmethod .)
+
+
+state 8
+
+    (13) methodcall -> renderVideo .
+
+    $end            reduce using rule 13 (methodcall -> renderVideo .)
+
+
+state 9
+
+    (14) methodcall -> addText .
+
+    $end            reduce using rule 14 (methodcall -> addText .)
+
+
+state 10
+
+    (15) methodcall -> renderGif .
+
+    $end            reduce using rule 15 (methodcall -> renderGif .)
+
+
+state 11
+
+    (16) resizemethod -> RESIZE . IDENTIFIER BY NUMBER
+
+    IDENTIFIER      shift and go to state 17
+
+
+state 12
+
+    (17) trimmethod -> TRIM . IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER
+
+    IDENTIFIER      shift and go to state 18
+
+
+state 13
+
+    (19) renderVideo -> RENDERVIDEO . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 19
+
+
+state 14
+
+    (18) addText -> ADDTEXT . TO IDENTIFIER TO POSITION
+
+    TO              shift and go to state 20
+
+
+state 15
+
+    (20) renderGif -> RENDERGIF . FROM IDENTIFIER
+
+    FROM            shift and go to state 21
+
+
+state 16
+
+    (4) var_assign -> IDENTIFIER ASSIGN . Init
+    (5) var_assign -> IDENTIFIER ASSIGN . STRING
+    (6) var_assign -> IDENTIFIER ASSIGN . NUMBER
+    (7) Init -> . videoInit
+    (8) Init -> . photoInit
+    (21) NUMBER -> . INT
+    (22) NUMBER -> . FLOAT
+    (9) videoInit -> . VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT
+    (10) photoInit -> . PHOTO FROM STRING LASTING INT
+
+    STRING          shift and go to state 23
+    INT             shift and go to state 27
+    FLOAT           shift and go to state 28
+    VIDEO           shift and go to state 29
+    PHOTO           shift and go to state 30
+
+    Init                           shift and go to state 22
+    NUMBER                         shift and go to state 24
+    videoInit                      shift and go to state 25
+    photoInit                      shift and go to state 26
+
+state 17
+
+    (16) resizemethod -> RESIZE IDENTIFIER . BY NUMBER
+
+    BY              shift and go to state 31
+
+
+state 18
+
+    (17) trimmethod -> TRIM IDENTIFIER . FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER
+
+    FROM            shift and go to state 32
+
+
+state 19
+
+    (19) renderVideo -> RENDERVIDEO IDENTIFIER .
+
+    $end            reduce using rule 19 (renderVideo -> RENDERVIDEO IDENTIFIER .)
+
+
+state 20
+
+    (18) addText -> ADDTEXT TO . IDENTIFIER TO POSITION
+
+    IDENTIFIER      shift and go to state 33
+
+
+state 21
+
+    (20) renderGif -> RENDERGIF FROM . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 34
+
+
+state 22
+
+    (4) var_assign -> IDENTIFIER ASSIGN Init .
+
+    $end            reduce using rule 4 (var_assign -> IDENTIFIER ASSIGN Init .)
+
+
+state 23
+
+    (5) var_assign -> IDENTIFIER ASSIGN STRING .
+
+    $end            reduce using rule 5 (var_assign -> IDENTIFIER ASSIGN STRING .)
+
+
+state 24
+
+    (6) var_assign -> IDENTIFIER ASSIGN NUMBER .
+
+    $end            reduce using rule 6 (var_assign -> IDENTIFIER ASSIGN NUMBER .)
+
+
+state 25
+
+    (7) Init -> videoInit .
+
+    $end            reduce using rule 7 (Init -> videoInit .)
+
+
+state 26
+
+    (8) Init -> photoInit .
+
+    $end            reduce using rule 8 (Init -> photoInit .)
+
+
+state 27
+
+    (21) NUMBER -> INT .
+
+    $end            reduce using rule 21 (NUMBER -> INT .)
+    COMMA           reduce using rule 21 (NUMBER -> INT .)
+    TO              reduce using rule 21 (NUMBER -> INT .)
+
+
+state 28
+
+    (22) NUMBER -> FLOAT .
+
+    $end            reduce using rule 22 (NUMBER -> FLOAT .)
+    COMMA           reduce using rule 22 (NUMBER -> FLOAT .)
+    TO              reduce using rule 22 (NUMBER -> FLOAT .)
+
+
+state 29
+
+    (9) videoInit -> VIDEO . FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT
+
+    FROM            shift and go to state 35
+
+
+state 30
+
+    (10) photoInit -> PHOTO . FROM STRING LASTING INT
+
+    FROM            shift and go to state 36
+
+
+state 31
+
+    (16) resizemethod -> RESIZE IDENTIFIER BY . NUMBER
+    (21) NUMBER -> . INT
+    (22) NUMBER -> . FLOAT
+
+    INT             shift and go to state 27
+    FLOAT           shift and go to state 28
+
+    NUMBER                         shift and go to state 37
+
+state 32
+
+    (17) trimmethod -> TRIM IDENTIFIER FROM . NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER
+    (21) NUMBER -> . INT
+    (22) NUMBER -> . FLOAT
+
+    INT             shift and go to state 27
+    FLOAT           shift and go to state 28
+
+    NUMBER                         shift and go to state 38
+
+state 33
+
+    (18) addText -> ADDTEXT TO IDENTIFIER . TO POSITION
+
+    TO              shift and go to state 39
+
+
+state 34
+
+    (20) renderGif -> RENDERGIF FROM IDENTIFIER .
+
+    $end            reduce using rule 20 (renderGif -> RENDERGIF FROM IDENTIFIER .)
+
+
+state 35
+
+    (9) videoInit -> VIDEO FROM . STRING BETWEEN INT COMMA INT AND INT COMMA INT
+
+    STRING          shift and go to state 40
+
+
+state 36
+
+    (10) photoInit -> PHOTO FROM . STRING LASTING INT
+
+    STRING          shift and go to state 41
+
+
+state 37
+
+    (16) resizemethod -> RESIZE IDENTIFIER BY NUMBER .
+
+    $end            reduce using rule 16 (resizemethod -> RESIZE IDENTIFIER BY NUMBER .)
+
+
+state 38
+
+    (17) trimmethod -> TRIM IDENTIFIER FROM NUMBER . COMMA NUMBER TO NUMBER COMMA NUMBER
+
+    COMMA           shift and go to state 42
+
+
+state 39
+
+    (18) addText -> ADDTEXT TO IDENTIFIER TO . POSITION
+
+    POSITION        shift and go to state 43
+
+
+state 40
+
+    (9) videoInit -> VIDEO FROM STRING . BETWEEN INT COMMA INT AND INT COMMA INT
+
+    BETWEEN         shift and go to state 44
+
+
+state 41
+
+    (10) photoInit -> PHOTO FROM STRING . LASTING INT
+
+    LASTING         shift and go to state 45
+
+
+state 42
+
+    (17) trimmethod -> TRIM IDENTIFIER FROM NUMBER COMMA . NUMBER TO NUMBER COMMA NUMBER
+    (21) NUMBER -> . INT
+    (22) NUMBER -> . FLOAT
+
+    INT             shift and go to state 27
+    FLOAT           shift and go to state 28
+
+    NUMBER                         shift and go to state 46
+
+state 43
+
+    (18) addText -> ADDTEXT TO IDENTIFIER TO POSITION .
+
+    $end            reduce using rule 18 (addText -> ADDTEXT TO IDENTIFIER TO POSITION .)
+
+
+state 44
+
+    (9) videoInit -> VIDEO FROM STRING BETWEEN . INT COMMA INT AND INT COMMA INT
+
+    INT             shift and go to state 47
+
+
+state 45
+
+    (10) photoInit -> PHOTO FROM STRING LASTING . INT
+
+    INT             shift and go to state 48
+
+
+state 46
+
+    (17) trimmethod -> TRIM IDENTIFIER FROM NUMBER COMMA NUMBER . TO NUMBER COMMA NUMBER
+
+    TO              shift and go to state 49
+
+
+state 47
+
+    (9) videoInit -> VIDEO FROM STRING BETWEEN INT . COMMA INT AND INT COMMA INT
+
+    COMMA           shift and go to state 50
+
+
+state 48
+
+    (10) photoInit -> PHOTO FROM STRING LASTING INT .
+
+    $end            reduce using rule 10 (photoInit -> PHOTO FROM STRING LASTING INT .)
+
+
+state 49
+
+    (17) trimmethod -> TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO . NUMBER COMMA NUMBER
+    (21) NUMBER -> . INT
+    (22) NUMBER -> . FLOAT
+
+    INT             shift and go to state 27
+    FLOAT           shift and go to state 28
+
+    NUMBER                         shift and go to state 51
+
+state 50
+
+    (9) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA . INT AND INT COMMA INT
+
+    INT             shift and go to state 52
+
+
+state 51
+
+    (17) trimmethod -> TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER . COMMA NUMBER
+
+    COMMA           shift and go to state 53
+
+
+state 52
+
+    (9) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT . AND INT COMMA INT
+
+    AND             shift and go to state 54
+
+
+state 53
+
+    (17) trimmethod -> TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA . NUMBER
+    (21) NUMBER -> . INT
+    (22) NUMBER -> . FLOAT
+
+    INT             shift and go to state 27
+    FLOAT           shift and go to state 28
+
+    NUMBER                         shift and go to state 55
+
+state 54
+
+    (9) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND . INT COMMA INT
+
+    INT             shift and go to state 56
+
+
+state 55
+
+    (17) trimmethod -> TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER .
+
+    $end            reduce using rule 17 (trimmethod -> TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER .)
+
+
+state 56
+
+    (9) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT . COMMA INT
+
+    COMMA           shift and go to state 57
+
+
+state 57
+
+    (9) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA . INT
+
+    INT             shift and go to state 58
+
+
+state 58
+
+    (9) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT .
+
+    $end            reduce using rule 9 (videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT .)
 

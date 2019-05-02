@@ -1,138 +1,178 @@
-import ast
+from animations.ClipClasses import *
 from lexer import tokens
 
 from ply import yacc
 
-disable_warning = False
+# ======================================================================================
+# Defining parser methods
 
-# precedence = (
-#     ('left', 'NOT'),
-#     ('left', 'PLUS', 'MINUS'),
-#     ('left', 'MUL', 'DIV'),
-# )
+# NOTE: language grammar rules must be written as the docstring for these methods.
+# The 'p' parameter is a python tuple, interpreted as a tree.
+
+# NOTE: p[0] represents the non-terminal on the left of the colon ":"
+# p[1->n] are the terminals/non-terminals to the right of the colon.
+# these can have multiple values specified between "or"s "|".
+# The idea is to pass up predicable tuples with predictable values inside them up to p_videout.
+
+# NOTE: will cause errors trying to build parser if grammar contains terminals/non-terminals
+# that have not yet been implemented.
+# =================================================================================================
 
 
-def p_statement_list(p):
+# =================================================================================================
+# Main parse method.
+def p_videout(p): # Starting parser method.
     '''
-    statement_list : statement
-                   | statement_list statement
+     videout : var_assign
+             | methodcall
+             | empty
     '''
-    if len(p) == 2:
-        p[0] = ast.InstructionList([p[1]])
+    run(p[1])  # Run the parsed tree received from the parser.
+
+
+# ====================================================================================================
+# Assign Variables.
+def p_var_assign(p):
+    '''
+    var_assign : IDENTIFIER ASSIGN Init
+               | IDENTIFIER ASSIGN STRING
+               | IDENTIFIER ASSIGN NUMBER
+    '''
+    if type(p[3]) is tuple: # If p[3] is a tuple, it is a Init tree.
+        p[0] = (p[2], p[1], p[3])
     else:
-        p[1].children.append(p[2])
-        p[0] = p[1]
+        p[0] = (p[2], p[1], ('var', p[3])) # If it's not a tuple, it's a variable, so assign it a variable tree.
 
-
-def p_statement(p):
+# Initializations
+def p_init(p):
     '''
-    statement : identifier
-              | expression
-              | if_statement
+    Init : videoInit
+         | photoInit
+    '''
+    p[0]= p[1]
+
+def p_videoInit(p):
+    '''
+    videoInit : VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT
+    '''
+    p[0] = (p[1], p[3], p[5], p[7], p[9], p[11])
+
+def p_photoInit(p):
+    '''
+    photoInit : PHOTO FROM STRING LASTING INT
+    '''
+    p[0] = (p[1], p[3], p[5])
+
+
+# =========================================================================================================
+# Method Calls
+def p_methodcall(p):  # Define all method calls
+    '''
+    methodcall : resizemethod
+               | trimmethod
+               | renderVideo
+               | addText
+               | renderGif
+
+    '''  # TODO add more method calls and implementations.
+    p[0] = p[1]
+
+
+def p_resizemethod(p):  # Create resize tree.
+    '''
+    resizemethod : RESIZE IDENTIFIER BY NUMBER
+    '''
+    p[0] = (p[1], ('var', p[2]), p[4])
+
+
+def p_trimmethod(p):  # TODO Doesn't currently exist in BaseClip methods.
+    '''
+    trimmethod : TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER
+    '''
+    p[0] = (p[1], ('var', p[2]), p[4], p[6], p[8], p[10])
+
+
+def p_addText(p): # Adds the wanted text to the video or photo
+    '''
+    addText : ADDTEXT STRING TO IDENTIFIER TO POSITION
+    '''
+    p[0] = (p[1], p[2], ('var',p[3]), p[5])
+
+def p_renderVideo(p):  # Create renderVid tree.
+    '''
+    renderVideo : RENDERVIDEO IDENTIFIER
+    '''
+    p[0] = (p[1], ('var', p[2]))
+
+def p_renderGif(p): # Create renderGif tree
+    '''
+    renderGif : RENDERGIF FROM IDENTIFIER
+    '''
+    p[0] = (p[1],('var',p[3]))
+
+# =========================================================================================================
+# Miscellaneous methods.
+
+def p_NUMBER(p):
+    '''
+    NUMBER : INT
+           | FLOAT
     '''
     p[0] = p[1]
 
 
-def p_primitive(p):
+def p_empty(p):  # Define what an emtpy terminal is.
     '''
-    primitive : NUM_INT
-              | NUM_FLOAT
-              | STRING
+    empty :
     '''
-    if isinstance(p[1], ast.BaseExpression):
-        p[0] = p[1]
-    else:
-        p[0] = ast.Primitive(p[1])
-
-def p_binary_op(p):
-    '''
-    expression : expression PLUS expressions
-               | expression MINUS expression
-               | expression MULT expresison
-               | expresison DIV expresison
-    '''
-    p[0] = ast.BinaryOperation(p[1],p[3],p[2])
+    p[0] = None
 
 
-def p_boolean_operators(p):
-    '''
-    boolean : expression EQUALS expression
-    '''
-    p[0] = ast.BinaryOperation(p[1], p[3], p[2])
+def p_error(p):  # Print generic syntax error.
+    print("Syntax error found!")
 
 
-def p_assignable(p):
-    '''
-    assignable : primitive
-               | expression
-    '''
-    p[0] = p[1]
-
-
-def p_assign(p):
-    '''
-    expression : identifier SETTO assignable
-    '''
-    p[0] = ast.Assignment(p[1], p[3])
-
-
-def p_ifstatement(p):
-    '''
-    if_statement : IF expression LPAREN statement_list RPAREN
-    '''
-    p[0] = ast.If(p[2], p[4])
-
-
-def p_ifstatement_else_if(p):
-    '''
-    if_statement : IF expression LPAREN statement_list RPAREN ELSE if_statement
-    '''
-    p[0] = ast.If(p[2], p[4], p[7])
-
-
-def p_in_expressions(p):
-    '''
-    expression : expression IN exprew
-    '''
-    if len(p) == 4:
-        p[0] = ast.InExpression(p[1],p[3])
-    else:
-        p[0] = ast.InExpression(p[1],p[4],True)
-def p_expression(p):
-    '''
-    expression : primitive
-               | STRING
-               | identifier
-    '''
-    p[0] = p[1]
-
-def p_return(p):
-    '''
-    statement : RETURN expression
-    '''
-    p[0] = ast.ReturnStatement(p[2])
-
-def p_error(p):
-    if p is not None:
-        raise ParserSyntaxError("Syntax error at line %d, illegal token '%s' found" %(p.lineno,p.value))
-    raise ParserSyntaxError("Unexpected end of input")
-
-def get_parse():
-    return yacc.yacc(errorlog=yacc.NullLogger()) if disable_warning else yacc.yacc()
-
-
+# ==========================================================================================================
+# Instantiate parser.
 parser = yacc.yacc()
+
+env = {}  # Global dictionary to hold all variables created or modified within the run method.
+
+
+# ==========================================================================================================
+# Define the run method.
+def run(p):  # This method essentially traverses the tuple trees created by parser and executes them.
+    global env
+
+    print(p)  # Print for debugging.
+
+    # If what the run method is getting is a tuple, evaluate it's contents.
+    if type(p) is tuple:  # If it is a tuple, check the first item in the tuple to determine what to do.
+
+        if p[0] == '=':   # Handle variable assignment.
+            env[p[1]] = run(p[2])
+        elif p[0] == 'var':  # Handle variable retrieval.
+            if p[1] not in env:
+                return "Undeclared variable found!"
+            else:
+                return env[p[1]]
+
+        elif p[0] == 'video': # Handle videoClip object instantiation.
+            return videoClip(clip=p[1], start_time=(p[2], p[3]), end_time=(p[4], p[5]))
+
+        elif p[0] == 'renderVid':  # Handle rendering variable to video file.
+            final_out = run(p[1])  # Retrieve the variable from the env dictionary.
+            final_out.writeVideo("renderedVideo.mp4")  # TODO: Make this filename dynamic from method call
+
+    else:  # If the parameter is not a tuple, simply return it.
+        return p
+
+
+# ===========================================================================================================
+# Perpetual reading from the console
 while True:
     try:
-        s = input('VIDEOUT> ')
-    except EOFError:
+        input_string = input('>>')
+    except EOFError:  # If you click Ctrl+D, stop reading from console.
         break
-    if s == "exit":
-        input('Thanks for using BEAR! Press the enter key to exit.')
-        break
-    if s == 'help':
-        help()
-        continue
-    if not s:
-        continue
-result = parser.parse(s)
+    parser.parse(input_string)
