@@ -3,6 +3,9 @@ import ply.lex as lex
 # Defining list of generic tokens in the language.
 # NOTE: Ply's Lexer will use the list named "tokens" to tokenize
 # automatically based on the regex rules they have.
+
+#TODO: Add more tokens as necessary
+
 tokens = [
     'INT',
     'FLOAT',
@@ -14,31 +17,33 @@ tokens = [
     'ASPECT_RATIO',
     'COMMA',
     'KEYWORD',
-    'EXTRACT_AUDIO',
     'METHOD',
     'DELIMITERS'
 ]
+
+#TODO: Add more reserved words as necessary
 
 # Defining dictionary of specific reserved words and their token values.
 # NOTE: this is done to match all strings and identify keywords afterwards
 # using a dictionary mapping.
 reserved = {
-    'video'     : 'VIDEO',
-    'photo'     : 'PHOTO',
-    'resize'    : 'RESIZE',
-    'trim'      : 'TRIM',
-    'renderVid' : 'RENDERVIDEO',
-    'renderGif' : 'RENDERGIF',
-    'to'        : 'TO',
-    'by'        : 'BY',
-    'from'      : 'FROM',
-    'lasting'   : 'LASTING',
-    'and'       : 'AND',
-    'between'   : 'BETWEEN',
-    'position'  : 'POSITION',
-    'addText'   : "ADDTEXT",
-    'addAudio'  : 'ADDAUDIO',
-    'crop'      : 'CROP'
+    'video'         : 'VIDEO',
+    'photo'         : 'PHOTO',
+    'resize'        : 'RESIZE',
+    'trim'          : 'TRIM',
+    'renderVid'     : 'RENDERVIDEO',
+    'renderGif'     : 'RENDERGIF',
+    'to'            : 'TO',
+    'by'            : 'BY',
+    'from'          : 'FROM',
+    'lasting'       : 'LASTING',
+    'and'           : 'AND',
+    'between'       : 'BETWEEN',
+    'position'      : 'POSITION',
+    'addText'       : "ADDTEXT",
+    'addAudio'      : 'ADDAUDIO',
+    'crop'          : 'CROP',
+    'extractAudio'  : 'EXTRACTAUDIO'
 }
 
 tokens += reserved.values()
@@ -115,11 +120,6 @@ def t_RENDER_VID(t):
     return t
 
 
-def t_KEYWORD(t):
-    r'from|to|by|between|and|at'
-    return t
-
-
 def t_ASPECT_RATIO(t):
     r'vertical|phone|square|letterbox|widescreen|cinemascope|anamorphic|DCI|Digital IMAX'
     return t
@@ -129,7 +129,7 @@ def t_POSITION(t):
     r'top|left|bottom|right|center|top-left|top-right|bottom-left|bottom-right|top-center|bottom-center'
     return t
 
-
+#TODO: Either modify definition or add a new on to influde Filepaths
 def t_STRING(t):
     r'"(?:\\"|.)*?"'
     t.value = bytes(t.value.lstrip('"').rstrip('"'), "utf-8").decode("unicode_escape")
