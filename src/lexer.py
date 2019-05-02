@@ -150,20 +150,3 @@ def t_error(t):
 
 
 lexer = lex.lex()
-#
-# # Test it out
-# data = 'resize clip by 0.6 ' \
-#        'crop clip to cinemascope ' \
-#        'Clip1 = video from "test.mp4" between 2, 30 and 2, 45 ' \
-#        'trim clip from 1, 30 to 2, 50 ' \
-#        'Music = extractAudio from "test2.mp4" between 0, 10 and 0, 45 ' \
-#        'addAudio Music to Clip1 ' \
-#        'addText "Text" between 4, 50 and 5, 0 at center ' \
-#        'renderGif Clip1 ' \
-#        'renderVid Clip1'
-#
-# # Give the lexer some input
-# lexer.input(data)
-#
-# for tok in lexer:
-#     print(tok)

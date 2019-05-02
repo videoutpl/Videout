@@ -25,6 +25,7 @@ def p_videout(p): # Starting parser method.
     '''
      videout : var_assign
              | methodcall
+             | NUMBER
              | empty
     '''
     run(p[1])  # Run the parsed tree received from the parser.
@@ -70,8 +71,8 @@ def p_methodcall(p):  # Define all method calls
     '''
     methodcall : resizemethod
                | trimmethod
+               | addTextmethod
                | renderVideo
-               | addText
                | renderGif
 
     '''  # TODO add more method calls and implementations.
@@ -92,9 +93,9 @@ def p_trimmethod(p):  # TODO Doesn't currently exist in BaseClip methods.
     p[0] = (p[1], ('var', p[2]), p[4], p[6], p[8], p[10])
 
 
-def p_addText(p): # Adds the wanted text to the video or photo
+def p_addTextmethod(p): # Adds the wanted text to the video or photo
     '''
-    addText : ADDTEXT STRING TO IDENTIFIER TO POSITION
+    addTextmethod : ADDTEXT STRING TO IDENTIFIER TO POSITION
     '''
     p[0] = (p[1], p[2], ('var',p[3]), p[5])
 
@@ -163,6 +164,8 @@ def run(p):  # This method essentially traverses the tuple trees created by pars
         elif p[0] == 'renderVid':  # Handle rendering variable to video file.
             final_out = run(p[1])  # Retrieve the variable from the env dictionary.
             final_out.writeVideo("renderedVideo.mp4")  # TODO: Make this filename dynamic from method call
+
+        #TODO: Add the methods for the tress of the other methods
 
     else:  # If the parameter is not a tuple, simply return it.
         return p
