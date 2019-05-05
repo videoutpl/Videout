@@ -16,9 +16,7 @@ tokens = [
     'RPAREN',
     'ASPECT_RATIO',
     'COMMA',
-    'KEYWORD',
-    'METHOD',
-    'DELIMITERS'
+    'BOOL'
 ]
 
 #TODO: Add more reserved words as necessary
@@ -31,8 +29,8 @@ reserved = {
     'photo'         : 'PHOTO',
     'resize'        : 'RESIZE',
     'trim'          : 'TRIM',
-    'renderVid'     : 'RENDERVIDEO',
-    'renderGif'     : 'RENDERGIF',
+    'renderVid'     : 'RENDER_VIDEO',
+    'renderGif'     : 'RENDER_GIF',
     'to'            : 'TO',
     'by'            : 'BY',
     'from'          : 'FROM',
@@ -40,10 +38,10 @@ reserved = {
     'and'           : 'AND',
     'between'       : 'BETWEEN',
     'position'      : 'POSITION',
-    'addText'       : "ADDTEXT",
-    'addAudio'      : 'ADDAUDIO',
+    'addText'       : "ADD_TEXT",
+    'addAudio'      : 'ADD_AUDIO',
     'crop'          : 'CROP',
-    'extractAudio'  : 'EXTRACTAUDIO'
+    'extractAudio'  : 'EXTRACT_AUDIO'
 }
 
 tokens += reserved.values()
@@ -68,6 +66,14 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
 
 
+def t_BOOL(t):
+    r'true|false'
+    if  t.value == 'true':
+        t.value = True
+    elif t.value == 'false':
+        t.value = False
+    return t
+
 def t_FLOAT(t):
     r'\d*\.\d+'
     t.value = float(t.value)
@@ -77,46 +83,6 @@ def t_FLOAT(t):
 def t_INT(t):
     r'\d+'
     t.value = int(t.value)
-    return t
-
-
-def t_RESIZE(t):
-    r'resize'
-    return t
-
-
-def t_CROP(t):
-    r'crop'
-    return t
-
-
-def t_EXTRACT_AUDIO(t):
-    r'extractAudio'
-    return t
-
-
-def t_ADD_AUDIO(t):
-    r'addAudio'
-    return t
-
-
-def t_ADD_TEXT(t):
-    r'addText'
-    return t
-
-
-def t_TRIM(t):
-    r'trim'
-    return t
-
-
-def t_RENDER_GIF(t):
-    r'renderGif'
-    return t
-
-
-def t_RENDER_VID(t):
-    r'renderVid'
     return t
 
 

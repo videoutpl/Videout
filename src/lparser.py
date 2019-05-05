@@ -26,6 +26,7 @@ def p_videout(p): # Starting parser method.
      videout : var_assign
              | methodcall
              | NUMBER
+             | BOOLEAN
              | empty
     '''
     run(p[1])  # Run the parsed tree received from the parser.
@@ -38,6 +39,7 @@ def p_var_assign(p):
     var_assign : IDENTIFIER ASSIGN Init
                | IDENTIFIER ASSIGN STRING
                | IDENTIFIER ASSIGN NUMBER
+               | IDENTIFIER ASSIGN BOOLEAN
     '''
     if type(p[3]) is tuple: # If p[3] is a tuple, it is a Init tree.
         p[0] = (p[2], p[1], p[3])
@@ -74,6 +76,8 @@ def p_methodcall(p):  # Define all method calls
                | addTextmethod
                | renderVideo
                | renderGif
+               | cropmethod
+               | addAudiomethod
 
     '''  # TODO add more method calls and implementations.
     p[0] = p[1]
@@ -92,6 +96,17 @@ def p_trimmethod(p):  # TODO Doesn't currently exist in BaseClip methods.
     '''
     p[0] = (p[1], ('var', p[2]), p[4], p[6], p[8], p[10])
 
+def p_cropmethod(p):
+    '''
+    cropmethod : CROP IDENTIFIER BY ASPECT_RATIO
+    '''
+    p[0] = (p[1], ('var',p[2]), p[4])
+
+def p_addAudiomethod(p):
+    '''
+    addAudiomethod : ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+    '''
+    p[0] = (p[1],p[2],('var',p[4]), p[6],p[8])
 
 def p_addTextmethod(p): # Adds the wanted text to the video or photo
     '''
@@ -113,6 +128,12 @@ def p_renderGif(p): # Create renderGif tree
 
 # =========================================================================================================
 # Miscellaneous methods.
+
+def p_BOOLEAN(p):
+    '''
+    BOOLEAN : BOOL
+    '''
+    p[0] = p[1]
 
 def p_NUMBER(p):
     '''
