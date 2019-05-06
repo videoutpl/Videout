@@ -1,7 +1,8 @@
 import operator
 from types import LambdaType
-from  src.exceptions import *
-from src import symbol_table
+
+import symbol_table
+from exceptions import *
 
 symbols = symbol_table.SymbolTable()
 
@@ -148,7 +149,7 @@ class ArrayAssign(BaseExpression):
 
 
 class ArraySlice(BaseExpression):
-    def __init__(self, array: Identifier, start: BaseExpression=None, end: BaseExpression=None):
+    def __init__(self, array: Identifier, start: BaseExpression = None, end: BaseExpression = None):
         self.array = array
         self.start = start
         self.end = end
@@ -467,7 +468,7 @@ class BuiltInFunction(BaseExpression):
 
 
 class InExpression(BaseExpression):
-    def __init__(self, a: BaseExpression, b: BaseExpression, not_in: bool=False):
+    def __init__(self, a: BaseExpression, b: BaseExpression, not_in: bool = False):
         self.a = a
         self.b = b
         self.not_in = not_in

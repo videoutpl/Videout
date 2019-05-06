@@ -1,4 +1,5 @@
 from moviepy.editor import *
+
 from animations.BaseClip import BaseClip
 
 

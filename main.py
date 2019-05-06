@@ -1,12 +1,10 @@
 import os
 
-from animations.ClipClasses import videoClip, finalVideo, photoClip
-
+from animations.ClipClasses import videoClip
 
 
 # This file is only used to test methods!!!!
 def main():
-
     clip = os.getenv('USERPROFILE') + '\\Videos\\llama_transformation.mp4'
     clip2 = os.getenv('USERPROFILE') + '\\Videos\\TakeOnMe_Weezer.mp4'
     clipForAudio = os.getenv('USERPROFILE') + '\\Videos\\LoveIsWar.mp4'
@@ -38,7 +36,6 @@ def main():
     # final.add_text(text='In my nightmares\nI see rabbits.', font_size=30, color='white',
     #                font='Amiri-Bold', interline=-10, pos=(20, 190), duration=final.duration)
 
-    
     vclip.writeVideo(filename=(aspectRatios[4] + 'Test.mp4'))
     vclip.create_gif(filename="testgif.gif")
 

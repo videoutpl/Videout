@@ -1,13 +1,12 @@
-import time
-import parser as p
 import ast
-from src import enviroment
-from src import exceptions
+import parser as p
 import pprint
 import sys
 
+from src import enviroment
 
-def execute(source, show_ast: bool=False, disable_warnings: bool=True):
+
+def execute(source, show_ast: bool = False, disable_warnings: bool = True):
     p.disable_warnings = disable_warnings
 
     try:
