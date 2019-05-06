@@ -1,7 +1,12 @@
 import ply.lex as lex
 
-# List of token names
-tokens = (
+# Defining list of generic tokens in the language.
+# NOTE: Ply's Lexer will use the list named "tokens" to tokenize
+# automatically based on the regex rules they have.
+
+#TODO: Add more tokens as necessary
+
+tokens = [
     'INT',
     'FLOAT',
     'IDENTIFIER',
@@ -11,19 +16,41 @@ tokens = (
     'RPAREN',
     'ASPECT_RATIO',
     'COMMA',
-    'RESIZE',
-    'CROP',
-    'TRIM',
-    'KEYWORD',
-    'EXTRACT_AUDIO',
-    'ADD_AUDIO',
-    'ADD_TEXT',
-    'POSITION',
-    'RENDER_GIF',
-    'RENDER_VID'
-)
+    'BOOL'
+]
 
-# Regular expresion rules for simple tokens
+#TODO: Add more reserved words as necessary
+
+# Defining dictionary of specific reserved words and their token values.
+# NOTE: this is done to match all strings and identify keywords afterwards
+# using a dictionary mapping.
+reserved = {
+    'video'         : 'VIDEO',
+    'photo'         : 'PHOTO',
+    'resize'        : 'RESIZE',
+    'trim'          : 'TRIM',
+    'renderVid'     : 'RENDER_VIDEO',
+    'renderGif'     : 'RENDER_GIF',
+    'to'            : 'TO',
+    'by'            : 'BY',
+    'from'          : 'FROM',
+    'lasting'       : 'LASTING',
+    'and'           : 'AND',
+    'between'       : 'BETWEEN',
+    'position'      : 'POSITION',
+    'addText'       : "ADD_TEXT",
+    'addAudio'      : 'ADD_AUDIO',
+    'crop'          : 'CROP',
+    'extractAudio'  : 'EXTRACT_AUDIO'
+}
+
+tokens += reserved.values()
+# =================================================================================
+# Defining rules for lex to interpret tokens.
+
+# Simple rules.
+# NOTE: Ply's lexer maps the regex of anything preceded by "t_"
+# to the token that follows it.
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA = ','
@@ -39,6 +66,14 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
 
 
+def t_BOOL(t):
+    r'true|false'
+    if  t.value == 'true':
+        t.value = True
+    elif t.value == 'false':
+        t.value = False
+    return t
+
 def t_FLOAT(t):
     r'\d*\.\d+'
     t.value = float(t.value)
@@ -51,51 +86,6 @@ def t_INT(t):
     return t
 
 
-def t_RESIZE(t):
-    r'resize'
-    return t
-
-
-def t_CROP(t):
-    r'crop'
-    return t
-
-
-def t_EXTRACT_AUDIO(t):
-    r'extractAudio'
-    return t
-
-
-def t_ADD_AUDIO(t):
-    r'addAudio'
-    return t
-
-
-def t_ADD_TEXT(t):
-    r'addText'
-    return t
-
-
-def t_TRIM(t):
-    r'trim'
-    return t
-
-
-def t_RENDER_GIF(t):
-    r'renderGif'
-    return t
-
-
-def t_RENDER_VID(t):
-    r'renderVid'
-    return t
-
-
-def t_KEYWORD(t):
-    r'from|to|by|between|and|at'
-    return t
-
-
 def t_ASPECT_RATIO(t):
     r'vertical|phone|square|letterbox|widescreen|cinemascope|anamorphic|DCI|Digital IMAX'
     return t
@@ -105,7 +95,7 @@ def t_POSITION(t):
     r'top|left|bottom|right|center|top-left|top-right|bottom-left|bottom-right|top-center|bottom-center'
     return t
 
-
+#TODO: Either modify definition or add a new on to influde Filepaths
 def t_STRING(t):
     r'"(?:\\"|.)*?"'
     t.value = bytes(t.value.lstrip('"').rstrip('"'), "utf-8").decode("unicode_escape")
@@ -126,20 +116,3 @@ def t_error(t):
 
 
 lexer = lex.lex()
-#
-# Test it out
-data = 'resize clip by 0.6 ' \
-       'crop clip to cinemascope ' \
-       'Clip1 = video from "test.mp4" between 2, 30 and 2, 45 ' \
-       'trim clip from 1, 30 to 2, 50 ' \
-       'Music = extractAudio from "test2.mp4" between 0, 10 and 0, 45 ' \
-       'addAudio Music to Clip1 ' \
-       'addText "Text" between 4, 50 and 5, 0 at center ' \
-       'renderGif Clip1 ' \
-       'renderVid Clip1'
-
-# Give the lexer some input
-lexer.input(data)
-
-for tok in lexer:
-    print(tok)
