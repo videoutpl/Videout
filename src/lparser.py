@@ -67,7 +67,7 @@ def p_videoInit(p):
     '''
     p[0] = videoClip(clip=p[3],start_time=(p[5],p[7]),end_time=(p[9],p[11]),fps=23.98)
     print(p[0])
-    p[0].writeVideo("test.mp4")
+    # p[0].writeVideo("test.mp4")
 
 def p_photoInit(p):
     '''
@@ -97,9 +97,8 @@ def p_resizemethod(p):  # Create resize tree.
     '''
     resizemethod : RESIZE IDENTIFIER BY NUMBER
     '''
-    final_out = p[2]
+    final_out = env[p[2]]
     final_out.resize(new_size=p[4])
-    print(env)
     # p[0] = (p[1], env(p[2]), p[4])
 
 
@@ -136,9 +135,8 @@ def p_renderVideo(p):  # Create renderVid tree.
     '''
     renderVideo : RENDER_VIDEO IDENTIFIER
     '''
-    print(p[2].value)
-    print(p[2].duration)
-    final_out = p[2]
+
+    final_out = env[p[2]]
     final_out.writeVideo("rendered.mp4")
     # p[0] = (p[1], ('var', p[2]))
 
