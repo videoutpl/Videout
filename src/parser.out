@@ -2,8 +2,7 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    EXTRACTAUDIO
-    KEYWORD
+    EXTRACT_AUDIO
     LPAREN
     RPAREN
 
@@ -33,10 +32,10 @@ Rule 20    methodcall -> addAudiomethod
 Rule 21    resizemethod -> RESIZE IDENTIFIER BY NUMBER
 Rule 22    trimmethod -> TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER
 Rule 23    cropmethod -> CROP IDENTIFIER BY ASPECT_RATIO
-Rule 24    addAudiomethod -> ADDAUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
-Rule 25    addTextmethod -> ADDTEXT STRING TO IDENTIFIER TO POSITION
-Rule 26    renderVideo -> RENDERVIDEO IDENTIFIER
-Rule 27    renderGif -> RENDERGIF FROM IDENTIFIER
+Rule 24    addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+Rule 25    addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO POSITION
+Rule 26    renderVideo -> RENDER_VIDEO IDENTIFIER
+Rule 27    renderGif -> RENDER_GIF FROM IDENTIFIER
 Rule 28    BOOLEAN -> BOOL
 Rule 29    NUMBER -> INT
 Rule 30    NUMBER -> FLOAT
@@ -44,8 +43,8 @@ Rule 31    empty -> <empty>
 
 Terminals, with rules where they appear
 
-ADDAUDIO             : 24
-ADDTEXT              : 25
+ADD_AUDIO            : 24
+ADD_TEXT             : 25
 AND                  : 12
 ASPECT_RATIO         : 23
 ASSIGN               : 6 7 8 9
@@ -54,18 +53,17 @@ BOOL                 : 28
 BY                   : 21 23
 COMMA                : 12 12 22 22 24
 CROP                 : 23
-EXTRACTAUDIO         : 
+EXTRACT_AUDIO        : 
 FLOAT                : 30
 FROM                 : 12 13 22 27
 IDENTIFIER           : 6 7 8 9 21 22 23 24 25 26 27
 INT                  : 12 12 12 12 13 29
-KEYWORD              : 
 LASTING              : 13
 LPAREN               : 
 PHOTO                : 13
 POSITION             : 25
-RENDERGIF            : 27
-RENDERVIDEO          : 26
+RENDER_GIF           : 27
+RENDER_VIDEO         : 26
 RESIZE               : 21
 RPAREN               : 
 STRING               : 7 12 13 24 25
@@ -120,11 +118,11 @@ state 0
     (31) empty -> .
     (21) resizemethod -> . RESIZE IDENTIFIER BY NUMBER
     (22) trimmethod -> . TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER
-    (25) addTextmethod -> . ADDTEXT STRING TO IDENTIFIER TO POSITION
-    (26) renderVideo -> . RENDERVIDEO IDENTIFIER
-    (27) renderGif -> . RENDERGIF FROM IDENTIFIER
+    (25) addTextmethod -> . ADD_TEXT STRING TO IDENTIFIER TO POSITION
+    (26) renderVideo -> . RENDER_VIDEO IDENTIFIER
+    (27) renderGif -> . RENDER_GIF FROM IDENTIFIER
     (23) cropmethod -> . CROP IDENTIFIER BY ASPECT_RATIO
-    (24) addAudiomethod -> . ADDAUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+    (24) addAudiomethod -> . ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 
     IDENTIFIER      shift and go to state 7
     INT             shift and go to state 15
@@ -133,11 +131,11 @@ state 0
     $end            reduce using rule 31 (empty -> .)
     RESIZE          shift and go to state 18
     TRIM            shift and go to state 19
-    ADDTEXT         shift and go to state 20
-    RENDERVIDEO     shift and go to state 21
-    RENDERGIF       shift and go to state 22
+    ADD_TEXT        shift and go to state 20
+    RENDER_VIDEO    shift and go to state 21
+    RENDER_GIF      shift and go to state 22
     CROP            shift and go to state 23
-    ADDAUDIO        shift and go to state 24
+    ADD_AUDIO       shift and go to state 24
 
     videout                        shift and go to state 1
     var_assign                     shift and go to state 2
@@ -294,21 +292,21 @@ state 19
 
 state 20
 
-    (25) addTextmethod -> ADDTEXT . STRING TO IDENTIFIER TO POSITION
+    (25) addTextmethod -> ADD_TEXT . STRING TO IDENTIFIER TO POSITION
 
     STRING          shift and go to state 28
 
 
 state 21
 
-    (26) renderVideo -> RENDERVIDEO . IDENTIFIER
+    (26) renderVideo -> RENDER_VIDEO . IDENTIFIER
 
     IDENTIFIER      shift and go to state 29
 
 
 state 22
 
-    (27) renderGif -> RENDERGIF . FROM IDENTIFIER
+    (27) renderGif -> RENDER_GIF . FROM IDENTIFIER
 
     FROM            shift and go to state 30
 
@@ -322,7 +320,7 @@ state 23
 
 state 24
 
-    (24) addAudiomethod -> ADDAUDIO . STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+    (24) addAudiomethod -> ADD_AUDIO . STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 
     STRING          shift and go to state 32
 
@@ -370,21 +368,21 @@ state 27
 
 state 28
 
-    (25) addTextmethod -> ADDTEXT STRING . TO IDENTIFIER TO POSITION
+    (25) addTextmethod -> ADD_TEXT STRING . TO IDENTIFIER TO POSITION
 
     TO              shift and go to state 43
 
 
 state 29
 
-    (26) renderVideo -> RENDERVIDEO IDENTIFIER .
+    (26) renderVideo -> RENDER_VIDEO IDENTIFIER .
 
-    $end            reduce using rule 26 (renderVideo -> RENDERVIDEO IDENTIFIER .)
+    $end            reduce using rule 26 (renderVideo -> RENDER_VIDEO IDENTIFIER .)
 
 
 state 30
 
-    (27) renderGif -> RENDERGIF FROM . IDENTIFIER
+    (27) renderGif -> RENDER_GIF FROM . IDENTIFIER
 
     IDENTIFIER      shift and go to state 44
 
@@ -398,7 +396,7 @@ state 31
 
 state 32
 
-    (24) addAudiomethod -> ADDAUDIO STRING . TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+    (24) addAudiomethod -> ADD_AUDIO STRING . TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 
     TO              shift and go to state 46
 
@@ -483,16 +481,16 @@ state 42
 
 state 43
 
-    (25) addTextmethod -> ADDTEXT STRING TO . IDENTIFIER TO POSITION
+    (25) addTextmethod -> ADD_TEXT STRING TO . IDENTIFIER TO POSITION
 
     IDENTIFIER      shift and go to state 51
 
 
 state 44
 
-    (27) renderGif -> RENDERGIF FROM IDENTIFIER .
+    (27) renderGif -> RENDER_GIF FROM IDENTIFIER .
 
-    $end            reduce using rule 27 (renderGif -> RENDERGIF FROM IDENTIFIER .)
+    $end            reduce using rule 27 (renderGif -> RENDER_GIF FROM IDENTIFIER .)
 
 
 state 45
@@ -504,7 +502,7 @@ state 45
 
 state 46
 
-    (24) addAudiomethod -> ADDAUDIO STRING TO . IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+    (24) addAudiomethod -> ADD_AUDIO STRING TO . IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 
     IDENTIFIER      shift and go to state 53
 
@@ -539,7 +537,7 @@ state 50
 
 state 51
 
-    (25) addTextmethod -> ADDTEXT STRING TO IDENTIFIER . TO POSITION
+    (25) addTextmethod -> ADD_TEXT STRING TO IDENTIFIER . TO POSITION
 
     TO              shift and go to state 57
 
@@ -553,7 +551,7 @@ state 52
 
 state 53
 
-    (24) addAudiomethod -> ADDAUDIO STRING TO IDENTIFIER . BETWEEN NUMBER COMMA NUMBER
+    (24) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER . BETWEEN NUMBER COMMA NUMBER
 
     BETWEEN         shift and go to state 58
 
@@ -585,14 +583,14 @@ state 56
 
 state 57
 
-    (25) addTextmethod -> ADDTEXT STRING TO IDENTIFIER TO . POSITION
+    (25) addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO . POSITION
 
     POSITION        shift and go to state 62
 
 
 state 58
 
-    (24) addAudiomethod -> ADDAUDIO STRING TO IDENTIFIER BETWEEN . NUMBER COMMA NUMBER
+    (24) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN . NUMBER COMMA NUMBER
     (29) NUMBER -> . INT
     (30) NUMBER -> . FLOAT
 
@@ -624,14 +622,14 @@ state 61
 
 state 62
 
-    (25) addTextmethod -> ADDTEXT STRING TO IDENTIFIER TO POSITION .
+    (25) addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO POSITION .
 
-    $end            reduce using rule 25 (addTextmethod -> ADDTEXT STRING TO IDENTIFIER TO POSITION .)
+    $end            reduce using rule 25 (addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO POSITION .)
 
 
 state 63
 
-    (24) addAudiomethod -> ADDAUDIO STRING TO IDENTIFIER BETWEEN NUMBER . COMMA NUMBER
+    (24) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER . COMMA NUMBER
 
     COMMA           shift and go to state 67
 
@@ -663,7 +661,7 @@ state 66
 
 state 67
 
-    (24) addAudiomethod -> ADDAUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA . NUMBER
+    (24) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA . NUMBER
     (29) NUMBER -> . INT
     (30) NUMBER -> . FLOAT
 
@@ -688,9 +686,9 @@ state 69
 
 state 70
 
-    (24) addAudiomethod -> ADDAUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER .
+    (24) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER .
 
-    $end            reduce using rule 24 (addAudiomethod -> ADDAUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER .)
+    $end            reduce using rule 24 (addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER .)
 
 
 state 71

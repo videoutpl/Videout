@@ -1,5 +1,5 @@
 from animations.ClipClasses import *
-from lexer import tokens
+from src.lexer import tokens
 
 from ply import yacc
 
@@ -110,19 +110,19 @@ def p_addAudiomethod(p):
 
 def p_addTextmethod(p): # Adds the wanted text to the video or photo
     '''
-    addTextmethod : ADDTEXT STRING TO IDENTIFIER TO POSITION
+    addTextmethod : ADD_TEXT STRING TO IDENTIFIER TO POSITION
     '''
     p[0] = (p[1], p[2], ('var',p[3]), p[5])
 
 def p_renderVideo(p):  # Create renderVid tree.
     '''
-    renderVideo : RENDERVIDEO IDENTIFIER
+    renderVideo : RENDER_VIDEO IDENTIFIER
     '''
     p[0] = (p[1], ('var', p[2]))
 
 def p_renderGif(p): # Create renderGif tree
     '''
-    renderGif : RENDERGIF FROM IDENTIFIER
+    renderGif : RENDER_GIF FROM IDENTIFIER
     '''
     p[0] = (p[1],('var',p[3]))
 
