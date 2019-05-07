@@ -21,6 +21,8 @@ from ply import yacc
 
 # =================================================================================================
 # Main parse method.
+env = {}
+
 def p_videout(p): # Starting parser method.
     '''
      videout : var_assign
@@ -29,7 +31,7 @@ def p_videout(p): # Starting parser method.
              | BOOLEAN
              | empty
     '''
-    run(p[1])  # Run the parsed tree received from the parser.
+    # run(p[1])  # Run the parsed tree received from the parser.
 
 
 # ====================================================================================================
@@ -40,11 +42,16 @@ def p_var_assign(p):
                | IDENTIFIER ASSIGN STRING
                | IDENTIFIER ASSIGN NUMBER
                | IDENTIFIER ASSIGN BOOLEAN
+               | IDENTIFIER ASSIGN IDENTIFIER
+
     '''
-    if type(p[3]) is tuple: # If p[3] is a tuple, it is a Init tree.
-        p[0] = (p[2], p[1], p[3])
-    else:
-        p[0] = (p[2], p[1], ('var', p[3])) # If it's not a tuple, it's a variable, so assign it a variable tree.
+    env[p[1]] = p[3]
+    p[0] = p[1]
+    print(env)
+    # if type(p[3]) is tuple: # If p[3] is a tuple, it is a Init tree.
+    #     p[0] = (p[2], p[1], p[3])
+    # else:
+    #     p[0] = (p[2], p[1], ('var', p[3])) # If it's not a tuple, it's a variable, so assign it a variable tree.
 
 # Initializations
 def p_init(p):
@@ -58,7 +65,9 @@ def p_videoInit(p):
     '''
     videoInit : VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT
     '''
-    p[0] = (p[1], p[3], p[5], p[7], p[9], p[11])
+    p[0] = videoClip(clip=p[3],start_time=(p[5],p[7]),end_time=(p[9],p[11]),fps=23.98)
+    print(p[0])
+    p[0].writeVideo("test.mp4")
 
 def p_photoInit(p):
     '''
@@ -78,6 +87,7 @@ def p_methodcall(p):  # Define all method calls
                | renderGif
                | cropmethod
                | addAudiomethod
+               | addExtractedAudiomethod
 
     '''  # TODO add more method calls and implementations.
     p[0] = p[1]
@@ -87,7 +97,10 @@ def p_resizemethod(p):  # Create resize tree.
     '''
     resizemethod : RESIZE IDENTIFIER BY NUMBER
     '''
-    p[0] = (p[1], ('var', p[2]), p[4])
+    final_out = p[2]
+    final_out.resize(new_size=p[4])
+    print(env)
+    # p[0] = (p[1], env(p[2]), p[4])
 
 
 def p_trimmethod(p):  # TODO Doesn't currently exist in BaseClip methods.
@@ -107,6 +120,11 @@ def p_addAudiomethod(p):
     addAudiomethod : ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
     '''
     p[0] = (p[1],p[2],('var',p[4]), p[6],p[8])
+def p_addExtractedAudiomethod(p):
+    '''
+    addExtractedAudiomethod : EXTRACT_AUDIO IDENTIFIER FROM IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+    '''
+    p[0] = (p[1],p[2],('var',p[4]), p[6],p[8])
 
 def p_addTextmethod(p): # Adds the wanted text to the video or photo
     '''
@@ -118,7 +136,11 @@ def p_renderVideo(p):  # Create renderVid tree.
     '''
     renderVideo : RENDER_VIDEO IDENTIFIER
     '''
-    p[0] = (p[1], ('var', p[2]))
+    print(p[2].value)
+    print(p[2].duration)
+    final_out = p[2]
+    final_out.writeVideo("rendered.mp4")
+    # p[0] = (p[1], ('var', p[2]))
 
 def p_renderGif(p): # Create renderGif tree
     '''
@@ -150,46 +172,67 @@ def p_empty(p):  # Define what an emtpy terminal is.
     p[0] = None
 
 
-def p_error(p):  # Print generic syntax error.
-    print("Syntax error found!")
+# def p_error(p):  # Print generic syntax error.
+#     print("Syntax error found!")
 
 
 # ==========================================================================================================
 # Instantiate parser.
 parser = yacc.yacc()
 
-env = {}  # Global dictionary to hold all variables created or modified within the run method.
+ # Global dictionary to hold all variables created or modified within the run method.
 
 
 # ==========================================================================================================
-# Define the run method.
-def run(p):  # This method essentially traverses the tuple trees created by parser and executes them.
-    global env
-
-    print(p)  # Print for debugging.
-
-    # If what the run method is getting is a tuple, evaluate it's contents.
-    if type(p) is tuple:  # If it is a tuple, check the first item in the tuple to determine what to do.
-
-        if p[0] == '=':   # Handle variable assignment.
-            env[p[1]] = run(p[2])
-        elif p[0] == 'var':  # Handle variable retrieval.
-            if p[1] not in env:
-                return "Undeclared variable found!"
-            else:
-                return env[p[1]]
-
-        elif p[0] == 'video': # Handle videoClip object instantiation.
-            return videoClip(clip=p[1], start_time=(p[2], p[3]), end_time=(p[4], p[5]))
-
-        elif p[0] == 'renderVid':  # Handle rendering variable to video file.
-            final_out = run(p[1])  # Retrieve the variable from the env dictionary.
-            final_out.writeVideo("renderedVideo.mp4")  # TODO: Make this filename dynamic from method call
-
-        #TODO: Add the methods for the tress of the other methods
-
-    else:  # If the parameter is not a tuple, simply return it.
-        return p
+# # Define the run method.
+# def run(p):  # This method essentially traverses the tuple trees created by parser and executes them.
+#     global env
+#
+#     print(p)  # Print for debugging.
+#     print(env)
+#     # If what the run method is getting is a tuple, evaluate it's contents.
+#     if type(p) is tuple:  # If it is a tuple, check the first item in the tuple to determine what to do.
+#
+#         if p[0] == '=':   # Handle variable assignment.
+#             env[p[1]] = p[2]
+#
+#         elif p[0] == 'var':  # Handle variable retrieval.
+#
+#             if p[1] not in env:
+#                 return "Undeclared variable found!"
+#             else:
+#                 return env[p[1]]
+#
+#         elif p[0] == 'video': # Handle videoClip object instantiation.
+#             env[p[1]] = videoClip(clip=p[1], start_time=(p[2], p[3]), end_time=(p[4], p[5]))
+#             print(env)
+#             return env[p[1]]
+#
+#
+#         elif p[0] == 'renderVid':  # Handle rendering variable to video file.
+#             final_out = p[1] # Retrieve the variable from the env dictionary.
+#             final_out.writeVideo("renderedVideo.mp4")  # TODO: Make this filename dynamic from method call
+#
+#         elif p[0] == 'resize':
+#             final_out = p[1]
+#             final_out.resize(new_size=p[3])
+#
+#         # elif p[0] == 'addText':
+#         #     final_out = run(p[3])
+#         #     final_out.add_text()
+#
+#         elif p[0] == 'addAudio':
+#             final_out = p[3]
+#             final_out.addAudioFromFile(file=p[1],start_time=p[5],end_time=p[7])
+#
+#         elif p[0] == 'extractAudio':
+#             final_out = p[3]
+#             final_out.addAudioFromClip(clipToExtract=p[1], start_time=p[5], end_time=p[7])
+#
+#         #TODO: Add the methods for the tress of the other methods
+#
+#     else:  # If the parameter is not a tuple, simply return it.
+#         return p
 
 
 # ===========================================================================================================

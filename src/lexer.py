@@ -11,6 +11,7 @@ tokens = [
     'FLOAT',
     'IDENTIFIER',
     'STRING',
+    'PATH',
     'ASSIGN',
     'LPAREN',
     'RPAREN',
@@ -105,7 +106,7 @@ def t_STRING(t):
 def t_IDENTIFIER(t):
     r'\w+'
     t.value = str(t.value)
-    # t.type = reserved.get(t.value, t.type)
+    t.type = reserved.get(t.value, t.type)
     return t
 
 
