@@ -47,7 +47,6 @@ def p_var_assign(p):
     '''
     env[p[1]] = p[3]
     p[0] = p[1]
-    print(env)
     # if type(p[3]) is tuple: # If p[3] is a tuple, it is a Init tree.
     #     p[0] = (p[2], p[1], p[3])
     # else:
@@ -66,14 +65,14 @@ def p_videoInit(p):
     videoInit : VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT
     '''
     p[0] = videoClip(clip=p[3],start_time=(p[5],p[7]),end_time=(p[9],p[11]),fps=23.98)
-    print(p[0])
-    # p[0].writeVideo("test.mp4")
+
 
 def p_photoInit(p):
     '''
     photoInit : PHOTO FROM STRING LASTING INT
     '''
-    p[0] = (p[1], p[3], p[5])
+
+    p[0] = photoClip(image=p[3], duration=p[5])
 
 
 # =========================================================================================================
@@ -106,19 +105,22 @@ def p_trimmethod(p):  # TODO Doesn't currently exist in BaseClip methods.
     '''
     trimmethod : TRIM IDENTIFIER FROM NUMBER COMMA NUMBER TO NUMBER COMMA NUMBER
     '''
-    p[0] = (p[1], ('var', p[2]), p[4], p[6], p[8], p[10])
+    # p[0] = (p[1], ('var', p[2]), p[4], p[6], p[8], p[10])
 
 def p_cropmethod(p):
     '''
     cropmethod : CROP IDENTIFIER BY ASPECT_RATIO
     '''
-    p[0] = (p[1], ('var',p[2]), p[4])
+    final_out = env[p[2]]
+    final_out.crop(aspectRatio=p[4])
 
 def p_addAudiomethod(p):
     '''
     addAudiomethod : ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
     '''
-    p[0] = (p[1],p[2],('var',p[4]), p[6],p[8])
+    final_out = env[p[4]]
+    final_out.addAudioFromFile(audio=p[2],start_time=p[6],end_time=p[8])
+    # p[0] = (p[1],p[2],('var',p[4]), p[6],p[8])
 def p_addExtractedAudiomethod(p):
     '''
     addExtractedAudiomethod : EXTRACT_AUDIO IDENTIFIER FROM IDENTIFIER BETWEEN NUMBER COMMA NUMBER
