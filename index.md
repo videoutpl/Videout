@@ -1,5 +1,6 @@
 # Welcome to Videout!
 ![Code Quality](https://img.shields.io/pypi/status/Django.svg)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 
 Videout is a language designed to facilitate the creation of short videos by means of text, 
 simple animations, and basic video editing for users who are not adept at utilizing 
@@ -69,16 +70,31 @@ And the rest of the tools are just as simple to implement.
 
 The crop method work by adjusting the aspect ratio of a video. The user can decide 
 the aspect ratio from any of the next:
-* 16:9
-* 4:3
-* 2.35:1 
-    * which is cinemascope
-* 17:9
-    * typically used for 4K
+* vertical
+* phone
+* square
+*
 
 Keep in mind that this method will cut part of the video if it's to a smaller aspect ratio. 
+The user can decide between any of this different aspect ratios. 
+
+Token | Aspect ratio
+------ | -----------
+vertical | 9:16
+phone | 9:16
+square | 1:1 
+letterbox | 4:3 or 1.33:1
+widescreen | 16:9 or 1.77:1
+cinemascope | 21:9 or 2.33:1
+anamorphic | 2.35:1
+DCI | 2.39:1
+Digital IMAX | 2.9:1
+
+Take in consideration that it's caps sensitive. therefore the token of the desired aspect ration most 
+be written exactly as it is in the table.
+
 ```
->> crop clip by 16:9
+>> crop clip by widescreen
 ```
 
 ### Resize: 
@@ -93,6 +109,9 @@ An example of how it works would be:
 
 The user can edit the audio of the video at any desired part of it. This works by taking a file with the 
 desired audio and setting it with the boundaries of where its going to play in the video.
+
+It's important to add the path as a string with `" "` and that the dashes are double `\\`.
+
 ```
 >> addAudio "C:\\User\\user\\Music\\dropbeat.mp3" to clip between 3,5 
 ```
@@ -104,6 +123,27 @@ constantly loop. The rendering of this type of media takes as input, a variable 
 the video.
 ```
 >> renderGif from clip
+```
+
+### Text:
+
+Lastly, one of the features is adding text to a desired video. This process is just as simple as 
+deciding what text you want to add to what video, and then the desired time that the user wants 
+the text to appear at. The user can decide any of this positions 
+
+positions | positions
+----------|-----------
+top|bottom
+left|right
+top-left|top-right
+bottom-left|bottom-right
+top-center|bottom-center
+center|
+
+An example of this line of code would be:
+
+```
+>> addText "I like trains..." to clip to bottom
 ```
 
 ## Video Demonstration
