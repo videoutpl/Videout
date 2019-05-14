@@ -1,19 +1,20 @@
 from moviepy.editor import *
-from animations.BaseClip import BaseClip
+
+from animations.base_clip import BaseClip
 
 
-class videoClip(BaseClip):
+class VideoClip(BaseClip):
 
-    def __init__(self, clip, start_time, end_time, fps= 29.97):
+    def __init__(self, clip, start_time, end_time, fps=29.97):
         BaseClip.__init__(self, VideoFileClip(clip).subclip(start_time, end_time).set_fps(fps))
 
 
-class photoClip(BaseClip):
+class PhotoClip(BaseClip):
     def __init__(self, image, duration=5):
         BaseClip.__init__(self, ImageClip(img=image, duration=duration))
 
 
-class finalVideo(BaseClip):
+class FinalVideo(BaseClip):
 
     def __init__(self):
         self.clip = None
