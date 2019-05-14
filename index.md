@@ -43,10 +43,10 @@ pip install -r requirements.txt
 * [ImageMagick](https://www.imagemagick.org/script/download.php)
    
    * Once installed make sure to read the following directory to set up **ImageMagick**
-      ```Shell
+     
+    ```
       venv/Lib/site-packages/moviepy/config_defaults.py
-
-
+    ```
 ## Basic Language Syntax and Operations
 
 The video editing tools that this language allows you to use are: 
