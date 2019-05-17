@@ -92,7 +92,7 @@ class BaseClip:
                                        width=width, height=height,
                                        x_center=x_center, y_center=y_center)
 
-    def add_text(self, text, font_size, color, font, interline, pos, duration):
+    def add_text(self, text, font_size, color, font, interline, posString, duration):
         """
         Add a layer of text over the selected clip.
 
@@ -105,6 +105,23 @@ class BaseClip:
         :param duration:
         :return:
         """
+        pos = (self.clip.w/2,self.clip.h/2)
+        if posString == 'top':
+            pos = (self.clip.w/2,self.clip.h/(self.clip.h-0.5))
+        elif posString == 'left':
+            pos =  (self.clip.w/(self.clip.w-0.5), self.clip.h/2)
+        elif posString == 'bottom':
+            pos = (self.clip.w/2, self.clip.h/1.1)
+        elif posString == 'right':
+            pos = (self.clip.w/1.1, self.clip.h/2)
+        elif posString == 'top-left':
+            pos = (self.clip.w/(self.clip.w-0.5), self.clip.h/(self.clip.h-0.5))
+        elif posString == 'top-right':
+            pos = (self.clip.w/1.1, self.clip.h/(self.clip.h-0.5))
+        elif posString == 'bottom-left':
+            pos = (self.clip.w/(self.clip.w-0.5), self.clip.h/1.1)
+        elif posString == 'bottom-right':
+            pos = (self.clip.w/1.1, self.clip.h/1.1)
         text = TextClip(text, fontsize=font_size, color=color,
                         font=font, interline=interline).set_pos(pos).set_duration(duration)
         self.clip = CompositeVideoClip([self.clip, text])

@@ -93,7 +93,7 @@ def t_ASPECT_RATIO(t):
 
 
 def t_POSITION(t):
-    r'top|left|bottom|right|center|top-left|top-right|bottom-left|bottom-right|top-center|bottom-center'
+    r'top|left|bottom|right|center|top-left|top-right|bottom-left|bottom-right'
     return t
 
 #TODO: Either modify definition or add a new on to influde Filepaths

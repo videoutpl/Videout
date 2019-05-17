@@ -123,16 +123,18 @@ def p_addAudiomethod(p):
     # p[0] = (p[1],p[2],('var',p[4]), p[6],p[8])
 def p_addExtractedAudiomethod(p):
     '''
-    addExtractedAudiomethod : EXTRACT_AUDIO IDENTIFIER FROM IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+    addExtractedAudiomethod : EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
     '''
-    p[0] = (p[1],p[2],('var',p[4]), p[6],p[8])
+    final_out = env[p[4]]
+    final_out.addAudioFromClip(clipToExtract=p[2], start_time=p[6], end_time=p[8])
 
 def p_addTextmethod(p): # Adds the wanted text to the video or photo
     '''
     addTextmethod : ADD_TEXT STRING TO IDENTIFIER TO POSITION
     '''
-    p[0] = (p[1], p[2], ('var',p[3]), p[5])
-
+    final_out = env[p[4]]
+    final_out.add_text(text=p[2], font_size=30, color='black',
+                       font='Amiri-Bold', interline=-10, posString=p[6], duration=final_out.duration)
 def p_renderVideo(p):  # Create renderVid tree.
     '''
     renderVideo : RENDER_VIDEO IDENTIFIER
