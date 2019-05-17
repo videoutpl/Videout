@@ -42,7 +42,9 @@ reserved = {
     'addText'       : "ADD_TEXT",
     'addAudio'      : 'ADD_AUDIO',
     'crop'          : 'CROP',
-    'extractAudio'  : 'EXTRACT_AUDIO'
+    'extractAudio'  : 'EXTRACT_AUDIO',
+   'concatenateClip': 'CONCATENATE_CLIP',
+    'showVars'      : 'SHOW_VARS'
 }
 
 tokens += reserved.values()
