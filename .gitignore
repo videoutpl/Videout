@@ -4,3 +4,4 @@ venv/
 *.gif
 video/
 gif/
+.vscode/
