@@ -43,7 +43,7 @@ Rule 30    addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA
 Rule 31    addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 Rule 32    addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO POSITION
 Rule 33    renderVideo -> RENDER_VIDEO IDENTIFIER
-Rule 34    renderGif -> RENDER_GIF FROM IDENTIFIER
+Rule 34    renderGif -> RENDER_GIF IDENTIFIER
 Rule 35    BOOLEAN -> BOOL
 Rule 36    NUMBER -> INT
 Rule 37    NUMBER -> FLOAT
@@ -64,7 +64,7 @@ CONCATENATE_CLIP     : 16
 CROP                 : 29
 EXTRACT_AUDIO        : 31
 FLOAT                : 37
-FROM                 : 14 15 34
+FROM                 : 14 15
 IDENTIFIER           : 6 7 8 9 10 10 16 16 26 28 29 30 31 31 32 33 34
 INT                  : 14 14 14 14 15 36
 LASTING              : 15
@@ -136,7 +136,7 @@ state 0
     (28) resizemethod -> . RESIZE IDENTIFIER BY NUMBER
     (32) addTextmethod -> . ADD_TEXT STRING TO IDENTIFIER TO POSITION
     (33) renderVideo -> . RENDER_VIDEO IDENTIFIER
-    (34) renderGif -> . RENDER_GIF FROM IDENTIFIER
+    (34) renderGif -> . RENDER_GIF IDENTIFIER
     (29) cropmethod -> . CROP IDENTIFIER BY ASPECT_RATIO
     (30) addAudiomethod -> . ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
     (31) addExtractedAudiomethod -> . EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
@@ -336,9 +336,9 @@ state 22
 
 state 23
 
-    (34) renderGif -> RENDER_GIF . FROM IDENTIFIER
+    (34) renderGif -> RENDER_GIF . IDENTIFIER
 
-    FROM            shift and go to state 32
+    IDENTIFIER      shift and go to state 32
 
 
 state 24
@@ -425,30 +425,30 @@ state 31
 
 state 32
 
-    (34) renderGif -> RENDER_GIF FROM . IDENTIFIER
+    (34) renderGif -> RENDER_GIF IDENTIFIER .
 
-    IDENTIFIER      shift and go to state 49
+    $end            reduce using rule 34 (renderGif -> RENDER_GIF IDENTIFIER .)
 
 
 state 33
 
     (29) cropmethod -> CROP IDENTIFIER . BY ASPECT_RATIO
 
-    BY              shift and go to state 50
+    BY              shift and go to state 49
 
 
 state 34
 
     (30) addAudiomethod -> ADD_AUDIO STRING . TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 
-    TO              shift and go to state 51
+    TO              shift and go to state 50
 
 
 state 35
 
     (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER . TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 
-    TO              shift and go to state 52
+    TO              shift and go to state 51
 
 
 state 36
@@ -511,21 +511,21 @@ state 44
 
     (14) videoInit -> VIDEO . FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT
 
-    FROM            shift and go to state 53
+    FROM            shift and go to state 52
 
 
 state 45
 
     (15) photoInit -> PHOTO . FROM STRING LASTING INT
 
-    FROM            shift and go to state 54
+    FROM            shift and go to state 53
 
 
 state 46
 
     (16) concatenateClip -> CONCATENATE_CLIP . IDENTIFIER AND IDENTIFIER
 
-    IDENTIFIER      shift and go to state 55
+    IDENTIFIER      shift and go to state 54
 
 
 state 47
@@ -537,130 +537,134 @@ state 47
     INT             shift and go to state 17
     FLOAT           shift and go to state 18
 
-    NUMBER                         shift and go to state 56
+    NUMBER                         shift and go to state 55
 
 state 48
 
     (32) addTextmethod -> ADD_TEXT STRING TO . IDENTIFIER TO POSITION
 
-    IDENTIFIER      shift and go to state 57
+    IDENTIFIER      shift and go to state 56
 
 
 state 49
 
-    (34) renderGif -> RENDER_GIF FROM IDENTIFIER .
+    (29) cropmethod -> CROP IDENTIFIER BY . ASPECT_RATIO
 
-    $end            reduce using rule 34 (renderGif -> RENDER_GIF FROM IDENTIFIER .)
+    ASPECT_RATIO    shift and go to state 57
 
 
 state 50
 
-    (29) cropmethod -> CROP IDENTIFIER BY . ASPECT_RATIO
+    (30) addAudiomethod -> ADD_AUDIO STRING TO . IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 
-    ASPECT_RATIO    shift and go to state 58
+    IDENTIFIER      shift and go to state 58
 
 
 state 51
 
-    (30) addAudiomethod -> ADD_AUDIO STRING TO . IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO . IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 
     IDENTIFIER      shift and go to state 59
 
 
 state 52
 
-    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO . IDENTIFIER BETWEEN NUMBER COMMA NUMBER
+    (14) videoInit -> VIDEO FROM . STRING BETWEEN INT COMMA INT AND INT COMMA INT
 
-    IDENTIFIER      shift and go to state 60
+    STRING          shift and go to state 60
 
 
 state 53
 
-    (14) videoInit -> VIDEO FROM . STRING BETWEEN INT COMMA INT AND INT COMMA INT
+    (15) photoInit -> PHOTO FROM . STRING LASTING INT
 
     STRING          shift and go to state 61
 
 
 state 54
 
-    (15) photoInit -> PHOTO FROM . STRING LASTING INT
+    (16) concatenateClip -> CONCATENATE_CLIP IDENTIFIER . AND IDENTIFIER
 
-    STRING          shift and go to state 62
+    AND             shift and go to state 62
 
 
 state 55
-
-    (16) concatenateClip -> CONCATENATE_CLIP IDENTIFIER . AND IDENTIFIER
-
-    AND             shift and go to state 63
-
-
-state 56
 
     (28) resizemethod -> RESIZE IDENTIFIER BY NUMBER .
 
     $end            reduce using rule 28 (resizemethod -> RESIZE IDENTIFIER BY NUMBER .)
 
 
-state 57
+state 56
 
     (32) addTextmethod -> ADD_TEXT STRING TO IDENTIFIER . TO POSITION
 
-    TO              shift and go to state 64
+    TO              shift and go to state 63
 
 
-state 58
+state 57
 
     (29) cropmethod -> CROP IDENTIFIER BY ASPECT_RATIO .
 
     $end            reduce using rule 29 (cropmethod -> CROP IDENTIFIER BY ASPECT_RATIO .)
 
 
-state 59
+state 58
 
     (30) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER . BETWEEN NUMBER COMMA NUMBER
+
+    BETWEEN         shift and go to state 64
+
+
+state 59
+
+    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER . BETWEEN NUMBER COMMA NUMBER
 
     BETWEEN         shift and go to state 65
 
 
 state 60
 
-    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER . BETWEEN NUMBER COMMA NUMBER
+    (14) videoInit -> VIDEO FROM STRING . BETWEEN INT COMMA INT AND INT COMMA INT
 
     BETWEEN         shift and go to state 66
 
 
 state 61
 
-    (14) videoInit -> VIDEO FROM STRING . BETWEEN INT COMMA INT AND INT COMMA INT
+    (15) photoInit -> PHOTO FROM STRING . LASTING INT
 
-    BETWEEN         shift and go to state 67
+    LASTING         shift and go to state 67
 
 
 state 62
 
-    (15) photoInit -> PHOTO FROM STRING . LASTING INT
+    (16) concatenateClip -> CONCATENATE_CLIP IDENTIFIER AND . IDENTIFIER
 
-    LASTING         shift and go to state 68
+    IDENTIFIER      shift and go to state 68
 
 
 state 63
 
-    (16) concatenateClip -> CONCATENATE_CLIP IDENTIFIER AND . IDENTIFIER
+    (32) addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO . POSITION
 
-    IDENTIFIER      shift and go to state 69
+    POSITION        shift and go to state 69
 
 
 state 64
 
-    (32) addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO . POSITION
+    (30) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN . NUMBER COMMA NUMBER
+    (36) NUMBER -> . INT
+    (37) NUMBER -> . FLOAT
 
-    POSITION        shift and go to state 70
+    INT             shift and go to state 17
+    FLOAT           shift and go to state 18
 
+    NUMBER                         shift and go to state 70
 
 state 65
 
-    (30) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN . NUMBER COMMA NUMBER
+    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN . NUMBER COMMA NUMBER
     (36) NUMBER -> . INT
     (37) NUMBER -> . FLOAT
 
@@ -671,74 +675,74 @@ state 65
 
 state 66
 
-    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN . NUMBER COMMA NUMBER
-    (36) NUMBER -> . INT
-    (37) NUMBER -> . FLOAT
+    (14) videoInit -> VIDEO FROM STRING BETWEEN . INT COMMA INT AND INT COMMA INT
 
-    INT             shift and go to state 17
-    FLOAT           shift and go to state 18
+    INT             shift and go to state 72
 
-    NUMBER                         shift and go to state 72
 
 state 67
 
-    (14) videoInit -> VIDEO FROM STRING BETWEEN . INT COMMA INT AND INT COMMA INT
+    (15) photoInit -> PHOTO FROM STRING LASTING . INT
 
     INT             shift and go to state 73
 
 
 state 68
 
-    (15) photoInit -> PHOTO FROM STRING LASTING . INT
-
-    INT             shift and go to state 74
-
-
-state 69
-
     (16) concatenateClip -> CONCATENATE_CLIP IDENTIFIER AND IDENTIFIER .
 
     $end            reduce using rule 16 (concatenateClip -> CONCATENATE_CLIP IDENTIFIER AND IDENTIFIER .)
 
 
-state 70
+state 69
 
     (32) addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO POSITION .
 
     $end            reduce using rule 32 (addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO POSITION .)
 
 
-state 71
+state 70
 
     (30) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER . COMMA NUMBER
+
+    COMMA           shift and go to state 74
+
+
+state 71
+
+    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER . COMMA NUMBER
 
     COMMA           shift and go to state 75
 
 
 state 72
 
-    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER . COMMA NUMBER
+    (14) videoInit -> VIDEO FROM STRING BETWEEN INT . COMMA INT AND INT COMMA INT
 
     COMMA           shift and go to state 76
 
 
 state 73
 
-    (14) videoInit -> VIDEO FROM STRING BETWEEN INT . COMMA INT AND INT COMMA INT
-
-    COMMA           shift and go to state 77
-
-
-state 74
-
     (15) photoInit -> PHOTO FROM STRING LASTING INT .
 
     $end            reduce using rule 15 (photoInit -> PHOTO FROM STRING LASTING INT .)
 
 
-state 75
+state 74
 
     (30) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA . NUMBER
+    (36) NUMBER -> . INT
+    (37) NUMBER -> . FLOAT
+
+    INT             shift and go to state 17
+    FLOAT           shift and go to state 18
+
+    NUMBER                         shift and go to state 77
+
+state 75
+
+    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA . NUMBER
     (36) NUMBER -> . INT
     (37) NUMBER -> . FLOAT
 
@@ -749,65 +753,54 @@ state 75
 
 state 76
 
-    (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA . NUMBER
-    (36) NUMBER -> . INT
-    (37) NUMBER -> . FLOAT
-
-    INT             shift and go to state 17
-    FLOAT           shift and go to state 18
-
-    NUMBER                         shift and go to state 79
-
-state 77
-
     (14) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA . INT AND INT COMMA INT
 
-    INT             shift and go to state 80
+    INT             shift and go to state 79
 
 
-state 78
+state 77
 
     (30) addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER .
 
     $end            reduce using rule 30 (addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER .)
 
 
-state 79
+state 78
 
     (31) addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER .
 
     $end            reduce using rule 31 (addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER .)
 
 
-state 80
+state 79
 
     (14) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT . AND INT COMMA INT
 
-    AND             shift and go to state 81
+    AND             shift and go to state 80
+
+
+state 80
+
+    (14) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND . INT COMMA INT
+
+    INT             shift and go to state 81
 
 
 state 81
 
-    (14) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND . INT COMMA INT
+    (14) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT . COMMA INT
 
-    INT             shift and go to state 82
+    COMMA           shift and go to state 82
 
 
 state 82
 
-    (14) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT . COMMA INT
+    (14) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA . INT
 
-    COMMA           shift and go to state 83
+    INT             shift and go to state 83
 
 
 state 83
-
-    (14) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA . INT
-
-    INT             shift and go to state 84
-
-
-state 84
 
     (14) videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT .
 

@@ -39,9 +39,9 @@ def p_videout(p): # Starting parser method.
 # ====================================================================================================
 # Assign Variables.
 def p_var_assign(p):
-    '''
-    This method permits the user assign something to a variable, declared as the lexer params (Init, STRING, etc)
 
+    # This method permits the user assign something to a variable, declared as the lexer params (Init, STRING, etc)
+    '''
     var_assign : IDENTIFIER ASSIGN Init
                | IDENTIFIER ASSIGN STRING
                | IDENTIFIER ASSIGN NUMBER
@@ -54,10 +54,10 @@ def p_var_assign(p):
 
 
 def p_init(p):
+
+
+    # This method is used to create variables of said params and use them with the rest of the methods.
     '''
-
-    This method is used to create variables of said params and use them with the rest of the methods.
-
     Init : videoInit
          | photoInit
          | concatenateClip
@@ -65,39 +65,39 @@ def p_init(p):
     p[0]= p[1]
 
 def p_videoInit(p):
+
+
+    # Method used to create a video clip taken from your file directory. Path must be specified
+    # and all 'slashes (/) must be double for the python parser to work and obtain the file.
+    #
+    # The user specifies the video from path and the run time. You select the start and end time of the clip
+    # taken from the original video.
     '''
-
-    Method used to create a video clip taken from your file directory. Path must be specified
-    and all 'slashes (/) must be double for the python parser to work and obtain the file.
-
-    The user specifies the video from path and the run time. You select the start and end time of the clip
-    taken from the original video.
-
     videoInit : VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT
     '''
     p[0] = videoClip(clip=p[3],start_time=(p[5],p[7]),end_time=(p[9],p[11]),fps=23.98)
 
 
 def p_photoInit(p):
+
+
+    # Method used to create a photo clip from a picture on directory. Path must be specified
+    # and all 'slashes (/) must be double for the python parser to work and obtain the file.
+    #
+    # The user specifies the picture from path and the run time (amount of time the picture will be on screen)
     '''
-
-    Method used to create a photo clip from a picture on directory. Path must be specified
-    and all 'slashes (/) must be double for the python parser to work and obtain the file.
-
-    The user specifies the picture from path and the run time (amount of time the picture will be on screen)
-
     photoInit : PHOTO FROM STRING LASTING INT
     '''
 
     p[0] = photoClip(image=p[3], duration=p[5])
 
 def p_concatenateClip(p):
+
+
+    # Method used to create a concatenated clip from clips or pics (identifiers/variables) already created
+    # on the system. The method will concatenate the first identifier with the second by creating a new
+    # identifier/variable.
     '''
-
-    Method used to create a concatenated clip from clips or pics (identifiers/variables) already created
-    on the system. The method will concatenate the first identifier with the second by creating a new
-    identifier/variable.
-
     concatenateClip : CONCATENATE_CLIP IDENTIFIER AND IDENTIFIER
     '''
     final_out = finalVideo()
@@ -124,27 +124,28 @@ def p_methodcall(p):  # Define all method calls
     p[0] = p[1]
 
 def p_showVarmethod(p):
-    """
-    Stat method to show he value of a identifier/variable on system.
 
+    # Stat method to show he value of a identifier/variable on system.
+    """
     showVarmethod : IDENTIFIER
 
     """
     print(env[p[1]])
 def p_showAllVarsmethod(p):
-    """
-    Stat method to show all stored variables and identifiers on the system at the moment.
 
+    # Stat method to show all stored variables and identifiers on the system at the moment.
+    """
     showAllVarsmethod : SHOW_VARS
 
     """
     print(env)
 def p_resizemethod(p):  # Create resize tree.
+
+
+    # Method to resize/scale a clip on a identifier/variable by a given number. The resized clip will
+    # be permanently changed.
+
     '''
-
-    Method to resize/scale a clip on a identifier/variable by a given number. The resized clip will
-    be permanently changed.
-
     resizemethod : RESIZE IDENTIFIER BY NUMBER
     '''
     final_out = env[p[2]]
@@ -152,43 +153,43 @@ def p_resizemethod(p):  # Create resize tree.
 
 
 def p_cropmethod(p):
+
+
+    # Method to crop a clip by given aspect_ratios. These ratios are declared as strings and
+    # will automatically be executed on call, as per the appropriate ratios defined beforehand.
+    # The cropped clip will be permanently changed.
+
     '''
-
-    Method to crop a clip by given aspect_ratios. These ratios are declared as strings and
-    will automatically be executed on call, as per the appropriate ratios defined beforehand.
-    The cropped clip will be permanently changed.
-
-
     cropmethod : CROP IDENTIFIER BY ASPECT_RATIO
     '''
     final_out = env[p[2]]
     final_out.crop(aspectRatio=p[4])
 
 def p_addAudiomethod(p):
+
+
+    # Method to add overlay audio to a clip. If the clip already has audio, it will be overwritten.
+    #
+    # Path must be specified and all 'slashes (/) must be double for the python parser
+    # to work and obtain the file.
+    #
+    # The user specifies the path as a string and the time the audio will run (start and end time)
+    # taken from the original audio file.
     '''
-
-    Method to add overlay audio to a clip. If the clip already has audio, it will be overwritten.
-
-    Path must be specified and all 'slashes (/) must be double for the python parser
-    to work and obtain the file.
-
-    The user specifies the path as a string and the time the audio will run (start and end time)
-    taken from the original audio file.
-
     addAudiomethod : ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
     '''
     final_out = env[p[4]]
     final_out.addAudioFromFile(audio=p[2],start_time=p[6],end_time=p[8])
     # p[0] = (p[1],p[2],('var',p[4]t), p[6],p[8])
 def p_addExtractedAudiomethod(p):
+
+
+    # Method to add overlay audio to a clip. If the clip already has audio, it will be overwritten.
+    #
+    # The user specifies the audio to extract as a variable/identifier and then the
+    # clip to add the extracted audio as another variable/identifier, the time the audio will run (start and end time)
+    # taken from the original audio file.
     '''
-
-    Method to add overlay audio to a clip. If the clip already has audio, it will be overwritten.
-
-    The user specifies the audio to extract as a variable/identifier and then the
-    clip to add the extracted audio as another variable/identifier, the time the audio will run (start and end time)
-    taken from the original audio file.
-
     addExtractedAudiomethod : EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER
 
     '''
@@ -196,12 +197,12 @@ def p_addExtractedAudiomethod(p):
     final_out.addAudioFromClip(clipToExtract=p[2], start_time=p[6], end_time=p[8])
 
 def p_addTextmethod(p): # Adds the wanted text to the video or photo
+
+
+    # Method to add text to a clip specified by a string on a position given by the user.
+    # The position is defined as a string and will be applied automatically on call, as per
+    # the appropriate ratios defined beforehand.
     '''
-
-    Method to add text to a clip specified by a string on a position given by the user.
-    The position is defined as a string and will be applied automatically on call, as per
-    the appropriate ratios defined beforehand.
-
     addTextmethod : ADD_TEXT STRING TO IDENTIFIER TO POSITION
     '''
     final_out = env[p[4]]
@@ -210,28 +211,28 @@ def p_addTextmethod(p): # Adds the wanted text to the video or photo
 
 
 def p_renderVideo(p):  # Create renderVid tree.
+
+
+    # Method to ultimately render a video. The user writes the renderVid call and the variable
+    # to be rendered. Said video will be created and stored on source directory.
     '''
-
-    Method to ultimately render a video. The user writes the renderVid call and the variable
-    to be rendered. Said video will be created and stored on source directory.
-
     renderVideo : RENDER_VIDEO IDENTIFIER
     '''
 
     final_out = env[p[2]]
-    final_out.writeVideo("rendered.mp4")
+    final_out.writeVideo(p[2]+".mp4")
     # p[0] = (p[1], ('var', p[2]))
 
 def p_renderGif(p): # Create renderGif tree
-    '''
 
-    Method to ultimately render a gif. The user writes the renderGif call and the variable
-    to be rendered. Said gif will be created and stored on source directory.
 
-    renderGif : RENDER_GIF FROM IDENTIFIER
+    # Method to ultimately render a gif. The user writes the renderGif call and the variable
+    # to be rendered. Said gif will be created and stored on source directory.
     '''
-    final_out = env[p[3]]
-    final_out.create_gif("renderedGif.gif")
+    renderGif : RENDER_GIF IDENTIFIER
+    '''
+    final_out = env[p[2]]
+    final_out.create_gif(p[2]+".gif")
 
 # =========================================================================================================
 # Miscellaneous methods.
