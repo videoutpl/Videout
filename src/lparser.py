@@ -220,7 +220,7 @@ def p_renderVideo(p):  # Create renderVid tree.
     '''
 
     final_out = env[p[2]]
-    final_out.writeVideo("rendered.mp4")
+    final_out.writeVideo(p[2]+".mp4")
     # p[0] = (p[1], ('var', p[2]))
 
 def p_renderGif(p): # Create renderGif tree
@@ -232,7 +232,7 @@ def p_renderGif(p): # Create renderGif tree
     renderGif : RENDER_GIF IDENTIFIER
     '''
     final_out = env[p[2]]
-    final_out.create_gif("renderedGif.gif")
+    final_out.create_gif(p[2]+".gif")
 
 # =========================================================================================================
 # Miscellaneous methods.
