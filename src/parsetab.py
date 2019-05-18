@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ADD_AUDIO ADD_TEXT AND ASPECT_RATIO ASSIGN BETWEEN BOOL BY COMMA CONCATENATE_CLIP CROP EXTRACT_AUDIO FLOAT FROM IDENTIFIER INT LASTING LPAREN PATH PHOTO POSITION RENDER_GIF RENDER_VIDEO RESIZE RPAREN SHOW_VARS STRING TO TRIM VIDEO\n     videout : var_assign\n             | methodcall\n             | NUMBER\n             | BOOLEAN\n             | empty\n    \n    var_assign : IDENTIFIER ASSIGN Init\n               | IDENTIFIER ASSIGN STRING\n               | IDENTIFIER ASSIGN NUMBER\n               | IDENTIFIER ASSIGN BOOLEAN\n               | IDENTIFIER ASSIGN IDENTIFIER\n\n    \n    Init : videoInit\n         | photoInit\n         | concatenateClip\n    \n    videoInit : VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT\n    \n    photoInit : PHOTO FROM STRING LASTING INT\n    \n    concatenateClip : CONCATENATE_CLIP IDENTIFIER AND IDENTIFIER\n    \n    methodcall : resizemethod\n               | addTextmethod\n               | renderVideo\n               | renderGif\n               | cropmethod\n               | addAudiomethod\n               | addExtractedAudiomethod\n               | showVarmethod\n               | showAllVarsmethod\n\n    \n    showVarmethod : IDENTIFIER\n    \n    showAllVarsmethod : SHOW_VARS\n    \n    resizemethod : RESIZE IDENTIFIER BY NUMBER\n    \n    cropmethod : CROP IDENTIFIER BY ASPECT_RATIO\n    \n    addAudiomethod : ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER\n    \n    addExtractedAudiomethod : EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER\n    \n    addTextmethod : ADD_TEXT STRING TO IDENTIFIER TO POSITION\n    \n    renderVideo : RENDER_VIDEO IDENTIFIER\n    \n    renderGif : RENDER_GIF FROM IDENTIFIER\n    \n    BOOLEAN : BOOL\n    \n    NUMBER : INT\n           | FLOAT\n    \n    empty :\n    '
+_lr_signature = 'ADD_AUDIO ADD_TEXT AND ASPECT_RATIO ASSIGN BETWEEN BOOL BY COMMA CONCATENATE_CLIP CROP EXTRACT_AUDIO FLOAT FROM IDENTIFIER INT LASTING LPAREN PATH PHOTO POSITION RENDER_GIF RENDER_VIDEO RESIZE RPAREN SHOW_VARS STRING TO TRIM VIDEO\n     videout : var_assign\n             | methodcall\n             | NUMBER\n             | BOOLEAN\n             | empty\n    \n    var_assign : IDENTIFIER ASSIGN Init\n               | IDENTIFIER ASSIGN STRING\n               | IDENTIFIER ASSIGN NUMBER\n               | IDENTIFIER ASSIGN BOOLEAN\n               | IDENTIFIER ASSIGN IDENTIFIER\n\n    \n    Init : videoInit\n         | photoInit\n         | concatenateClip\n    \n    videoInit : VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT\n    \n    photoInit : PHOTO FROM STRING LASTING INT\n    \n    concatenateClip : CONCATENATE_CLIP IDENTIFIER AND IDENTIFIER\n    \n    methodcall : resizemethod\n               | addTextmethod\n               | renderVideo\n               | renderGif\n               | cropmethod\n               | addAudiomethod\n               | addExtractedAudiomethod\n               | showVarmethod\n               | showAllVarsmethod\n\n    \n    showVarmethod : IDENTIFIER\n\n    \n    showAllVarsmethod : SHOW_VARS\n\n    \n    resizemethod : RESIZE IDENTIFIER BY NUMBER\n    \n    cropmethod : CROP IDENTIFIER BY ASPECT_RATIO\n    \n    addAudiomethod : ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER\n    \n    addExtractedAudiomethod : EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER\n\n    \n    addTextmethod : ADD_TEXT STRING TO IDENTIFIER TO POSITION\n    \n    renderVideo : RENDER_VIDEO IDENTIFIER\n    \n    renderGif : RENDER_GIF IDENTIFIER\n    \n    BOOLEAN : BOOL\n    \n    NUMBER : INT\n           | FLOAT\n    \n    empty :\n    '
     
-_lr_action_items = {'IDENTIFIER':([0,20,22,24,26,28,32,46,48,51,52,63,],[7,29,31,33,35,36,49,55,57,59,60,69,]),'INT':([0,28,47,65,66,67,68,75,76,77,81,83,],[17,17,17,17,17,73,74,17,17,80,82,84,]),'FLOAT':([0,28,47,65,66,75,76,],[18,18,18,18,18,18,18,]),'BOOL':([0,28,],[19,19,]),'$end':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,27,31,36,37,38,39,40,41,42,43,49,56,58,69,70,74,78,79,84,],[-38,0,-1,-2,-3,-4,-5,-26,-17,-18,-19,-20,-21,-22,-23,-24,-25,-36,-37,-35,-27,-33,-10,-6,-7,-8,-9,-11,-12,-13,-34,-28,-29,-16,-32,-15,-30,-31,-14,]),'RESIZE':([0,],[20,]),'ADD_TEXT':([0,],[21,]),'RENDER_VIDEO':([0,],[22,]),'RENDER_GIF':([0,],[23,]),'CROP':([0,],[24,]),'ADD_AUDIO':([0,],[25,]),'EXTRACT_AUDIO':([0,],[26,]),'SHOW_VARS':([0,],[27,]),'ASSIGN':([7,],[28,]),'COMMA':([17,18,71,72,73,82,],[-36,-37,75,76,77,83,]),'STRING':([21,25,28,53,54,],[30,34,38,61,62,]),'FROM':([23,44,45,],[32,53,54,]),'VIDEO':([28,],[44,]),'PHOTO':([28,],[45,]),'CONCATENATE_CLIP':([28,],[46,]),'BY':([29,33,],[47,50,]),'TO':([30,34,35,57,],[48,51,52,64,]),'ASPECT_RATIO':([50,],[58,]),'AND':([55,80,],[63,81,]),'BETWEEN':([59,60,61,],[65,66,67,]),'LASTING':([62,],[68,]),'POSITION':([64,],[70,]),}
+_lr_action_items = {'IDENTIFIER':([0,20,22,23,24,26,28,46,48,50,51,62,],[7,29,31,32,33,35,36,54,56,58,59,68,]),'INT':([0,28,47,64,65,66,67,74,75,76,80,82,],[17,17,17,17,17,72,73,17,17,79,81,83,]),'FLOAT':([0,28,47,64,65,74,75,],[18,18,18,18,18,18,18,]),'BOOL':([0,28,],[19,19,]),'$end':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,27,31,32,36,37,38,39,40,41,42,43,55,57,68,69,73,77,78,83,],[-38,0,-1,-2,-3,-4,-5,-26,-17,-18,-19,-20,-21,-22,-23,-24,-25,-36,-37,-35,-27,-33,-34,-10,-6,-7,-8,-9,-11,-12,-13,-28,-29,-16,-32,-15,-30,-31,-14,]),'RESIZE':([0,],[20,]),'ADD_TEXT':([0,],[21,]),'RENDER_VIDEO':([0,],[22,]),'RENDER_GIF':([0,],[23,]),'CROP':([0,],[24,]),'ADD_AUDIO':([0,],[25,]),'EXTRACT_AUDIO':([0,],[26,]),'SHOW_VARS':([0,],[27,]),'ASSIGN':([7,],[28,]),'COMMA':([17,18,70,71,72,81,],[-36,-37,74,75,76,82,]),'STRING':([21,25,28,52,53,],[30,34,38,60,61,]),'VIDEO':([28,],[44,]),'PHOTO':([28,],[45,]),'CONCATENATE_CLIP':([28,],[46,]),'BY':([29,33,],[47,49,]),'TO':([30,34,35,56,],[48,50,51,63,]),'FROM':([44,45,],[52,53,]),'ASPECT_RATIO':([49,],[57,]),'AND':([54,79,],[62,80,]),'BETWEEN':([58,59,60,],[64,65,66,]),'LASTING':([61,],[67,]),'POSITION':([63,],[69,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'videout':([0,],[1,]),'var_assign':([0,],[2,]),'methodcall':([0,],[3,]),'NUMBER':([0,28,47,65,66,75,76,],[4,39,56,71,72,78,79,]),'BOOLEAN':([0,28,],[5,40,]),'empty':([0,],[6,]),'resizemethod':([0,],[8,]),'addTextmethod':([0,],[9,]),'renderVideo':([0,],[10,]),'renderGif':([0,],[11,]),'cropmethod':([0,],[12,]),'addAudiomethod':([0,],[13,]),'addExtractedAudiomethod':([0,],[14,]),'showVarmethod':([0,],[15,]),'showAllVarsmethod':([0,],[16,]),'Init':([28,],[37,]),'videoInit':([28,],[41,]),'photoInit':([28,],[42,]),'concatenateClip':([28,],[43,]),}
+_lr_goto_items = {'videout':([0,],[1,]),'var_assign':([0,],[2,]),'methodcall':([0,],[3,]),'NUMBER':([0,28,47,64,65,74,75,],[4,39,55,70,71,77,78,]),'BOOLEAN':([0,28,],[5,40,]),'empty':([0,],[6,]),'resizemethod':([0,],[8,]),'addTextmethod':([0,],[9,]),'renderVideo':([0,],[10,]),'renderGif':([0,],[11,]),'cropmethod':([0,],[12,]),'addAudiomethod':([0,],[13,]),'addExtractedAudiomethod':([0,],[14,]),'showVarmethod':([0,],[15,]),'showAllVarsmethod':([0,],[16,]),'Init':([28,],[37,]),'videoInit':([28,],[41,]),'photoInit':([28,],[42,]),'concatenateClip':([28,],[43,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -37,32 +37,32 @@ _lr_productions = [
   ('var_assign -> IDENTIFIER ASSIGN NUMBER','var_assign',3,'p_var_assign','lparser.py',45),
   ('var_assign -> IDENTIFIER ASSIGN BOOLEAN','var_assign',3,'p_var_assign','lparser.py',46),
   ('var_assign -> IDENTIFIER ASSIGN IDENTIFIER','var_assign',3,'p_var_assign','lparser.py',47),
-  ('Init -> videoInit','Init',1,'p_init','lparser.py',56),
-  ('Init -> photoInit','Init',1,'p_init','lparser.py',57),
-  ('Init -> concatenateClip','Init',1,'p_init','lparser.py',58),
-  ('videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT','videoInit',11,'p_videoInit','lparser.py',64),
-  ('photoInit -> PHOTO FROM STRING LASTING INT','photoInit',5,'p_photoInit','lparser.py',71),
-  ('concatenateClip -> CONCATENATE_CLIP IDENTIFIER AND IDENTIFIER','concatenateClip',4,'p_concatenateClip','lparser.py',78),
-  ('methodcall -> resizemethod','methodcall',1,'p_methodcall','lparser.py',90),
-  ('methodcall -> addTextmethod','methodcall',1,'p_methodcall','lparser.py',91),
-  ('methodcall -> renderVideo','methodcall',1,'p_methodcall','lparser.py',92),
-  ('methodcall -> renderGif','methodcall',1,'p_methodcall','lparser.py',93),
-  ('methodcall -> cropmethod','methodcall',1,'p_methodcall','lparser.py',94),
-  ('methodcall -> addAudiomethod','methodcall',1,'p_methodcall','lparser.py',95),
-  ('methodcall -> addExtractedAudiomethod','methodcall',1,'p_methodcall','lparser.py',96),
-  ('methodcall -> showVarmethod','methodcall',1,'p_methodcall','lparser.py',97),
-  ('methodcall -> showAllVarsmethod','methodcall',1,'p_methodcall','lparser.py',98),
-  ('showVarmethod -> IDENTIFIER','showVarmethod',1,'p_showVarmethod','lparser.py',105),
-  ('showAllVarsmethod -> SHOW_VARS','showAllVarsmethod',1,'p_showAllVarsmethod','lparser.py',110),
-  ('resizemethod -> RESIZE IDENTIFIER BY NUMBER','resizemethod',4,'p_resizemethod','lparser.py',115),
-  ('cropmethod -> CROP IDENTIFIER BY ASPECT_RATIO','cropmethod',4,'p_cropmethod','lparser.py',123),
-  ('addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER','addAudiomethod',8,'p_addAudiomethod','lparser.py',130),
-  ('addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER','addExtractedAudiomethod',8,'p_addExtractedAudiomethod','lparser.py',137),
-  ('addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO POSITION','addTextmethod',6,'p_addTextmethod','lparser.py',144),
-  ('renderVideo -> RENDER_VIDEO IDENTIFIER','renderVideo',2,'p_renderVideo','lparser.py',153),
-  ('renderGif -> RENDER_GIF FROM IDENTIFIER','renderGif',3,'p_renderGif','lparser.py',162),
-  ('BOOLEAN -> BOOL','BOOLEAN',1,'p_BOOLEAN','lparser.py',172),
-  ('NUMBER -> INT','NUMBER',1,'p_NUMBER','lparser.py',178),
-  ('NUMBER -> FLOAT','NUMBER',1,'p_NUMBER','lparser.py',179),
-  ('empty -> <empty>','empty',0,'p_empty','lparser.py',186),
+  ('Init -> videoInit','Init',1,'p_init','lparser.py',58),
+  ('Init -> photoInit','Init',1,'p_init','lparser.py',59),
+  ('Init -> concatenateClip','Init',1,'p_init','lparser.py',60),
+  ('videoInit -> VIDEO FROM STRING BETWEEN INT COMMA INT AND INT COMMA INT','videoInit',11,'p_videoInit','lparser.py',69),
+  ('photoInit -> PHOTO FROM STRING LASTING INT','photoInit',5,'p_photoInit','lparser.py',83),
+  ('concatenateClip -> CONCATENATE_CLIP IDENTIFIER AND IDENTIFIER','concatenateClip',4,'p_concatenateClip','lparser.py',96),
+  ('methodcall -> resizemethod','methodcall',1,'p_methodcall','lparser.py',113),
+  ('methodcall -> addTextmethod','methodcall',1,'p_methodcall','lparser.py',114),
+  ('methodcall -> renderVideo','methodcall',1,'p_methodcall','lparser.py',115),
+  ('methodcall -> renderGif','methodcall',1,'p_methodcall','lparser.py',116),
+  ('methodcall -> cropmethod','methodcall',1,'p_methodcall','lparser.py',117),
+  ('methodcall -> addAudiomethod','methodcall',1,'p_methodcall','lparser.py',118),
+  ('methodcall -> addExtractedAudiomethod','methodcall',1,'p_methodcall','lparser.py',119),
+  ('methodcall -> showVarmethod','methodcall',1,'p_methodcall','lparser.py',120),
+  ('methodcall -> showAllVarsmethod','methodcall',1,'p_methodcall','lparser.py',121),
+  ('showVarmethod -> IDENTIFIER','showVarmethod',1,'p_showVarmethod','lparser.py',128),
+  ('showAllVarsmethod -> SHOW_VARS','showAllVarsmethod',1,'p_showAllVarsmethod','lparser.py',136),
+  ('resizemethod -> RESIZE IDENTIFIER BY NUMBER','resizemethod',4,'p_resizemethod','lparser.py',144),
+  ('cropmethod -> CROP IDENTIFIER BY ASPECT_RATIO','cropmethod',4,'p_cropmethod','lparser.py',157),
+  ('addAudiomethod -> ADD_AUDIO STRING TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER','addAudiomethod',8,'p_addAudiomethod','lparser.py',170),
+  ('addExtractedAudiomethod -> EXTRACT_AUDIO IDENTIFIER TO IDENTIFIER BETWEEN NUMBER COMMA NUMBER','addExtractedAudiomethod',8,'p_addExtractedAudiomethod','lparser.py',186),
+  ('addTextmethod -> ADD_TEXT STRING TO IDENTIFIER TO POSITION','addTextmethod',6,'p_addTextmethod','lparser.py',201),
+  ('renderVideo -> RENDER_VIDEO IDENTIFIER','renderVideo',2,'p_renderVideo','lparser.py',215),
+  ('renderGif -> RENDER_GIF IDENTIFIER','renderGif',2,'p_renderGif','lparser.py',228),
+  ('BOOLEAN -> BOOL','BOOLEAN',1,'p_BOOLEAN','lparser.py',242),
+  ('NUMBER -> INT','NUMBER',1,'p_NUMBER','lparser.py',248),
+  ('NUMBER -> FLOAT','NUMBER',1,'p_NUMBER','lparser.py',249),
+  ('empty -> <empty>','empty',0,'p_empty','lparser.py',256),
 ]
