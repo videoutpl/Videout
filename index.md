@@ -202,10 +202,12 @@ Then it will start to render the gif
 
 ## Video Demonstration
 
-This is the [desmonstration]() of how to make the rendering of a video, including adding audio and concatenation. And [this]() would be
-the result of said rendering. The videos are going to be saved on the src folder with the name of the variable as its name. 
+[This](https://youtu.be/afYup8YKshU) is the demonstration of how to make the rendering of a video, including adding audio
+and concatenation. And [this](https://youtu.be/jpoT1KOS9po) would be the result of said rendering. The videos are going to be saved on the src folder 
+with the name of the variable as its name. 
 
-Then [this]() would be the deomstration of how to render a gif, with its [result]() being saved on the src folder as well.
+Then [this](https://youtu.be/Ru2kBMBlcYQ) would be the demonstration of how to render a gif, with its [result](https://youtu.be/8No0FH3PHJY) being saved 
+on the src folder as well.
 
 
 ## Authors 
