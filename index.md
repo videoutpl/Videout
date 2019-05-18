@@ -43,10 +43,11 @@ pip install -r requirements.txt
 * [ImageMagick](https://www.imagemagick.org/script/download.php)
    
    * Once installed make sure to read the following directory to set up **ImageMagick**
-     
-    ```
+      ```
       venv/Lib/site-packages/moviepy/config_defaults.py
-    ```
+      ```
+
+
 ## Basic Language Syntax and Operations
 
 The video editing tools that this language allows you to use are: 
@@ -105,13 +106,21 @@ An example of how it works would be:
 ### Audio:
 
 The user can edit the audio of the video at any desired part of it. This works by taking a file with the 
-desired audio and setting it with the boundaries of where its going to play in the video.
+desired audio and setting it with the boundaries of where its going to play in the video.The user can also 
+decide what part of the audio should be used inside of a time frame `start,end`
 
 It's important to add the path as a string with `" "` and that the dashes are double `\\`.
 
 ```
->> addAudio "C:\\User\\user\\Music\\dropbeat.mp3" to clip between 3,5 
+>> addAudio "C:\\User\\user\\Music\\dropbeat.mp3" to clip between 3,7 
 ```
+
+There is also a function that allows you to extract the audio from a clip, and add that audio to another desired 
+clip. Making the re-use of audio much easier than using ``addAudio`` each time. . 
+
+````
+>> extractAudio clip2 to clip1 between 0,15.
+````
 
 ### Gif:
 
@@ -121,6 +130,21 @@ the video.
 ```
 >> renderGif from clip
 ```
+
+### Photo:
+
+Another function that can be done is making a variable hold an image. Later that image can be concatenated 
+at any clip already made. This can be done for titles or just an ending image of the video. Making this 
+variable is just as making the one for videos, but instead of a time frame, you decide how much its going to 
+last that image being shown when its concatenated. 
+
+
+The time is taken in consideration as seconds.
+
+````
+>> pic = photo from "C:\\User\\user\\Photos\image.jpg" lasting 5
+````
+
 
 ### Text:
 
@@ -143,7 +167,47 @@ An example of this line of code would be:
 >> addText "I like trains..." to clip to bottom
 ```
 
+### Concatenation
+Lastly, there is also a function that allows you to concatenate 2 videos (or video and image), making a new clip of it. The order 
+of the concatenation matters, since its going to be added from left to right. This means that if you use the video before a picture
+the result will be a video with that image at the end.
+
+````
+>> concat = concatenateClip clip and pic
+````
+
+If the user wants to add the image first, it most be specified that way
+
+````
+>> concat = concatenateClip pic and clip
+````
+
+### Sample code:
+
+````
+>>clip = video from "C:\\Users\\lexdy\\Desktop\\PL_Project\\Videout\\Test\\video\\The Simpsons-BartRap.mp4" between 0,40 and 0,70 
+>>addAudio "C:\\Users\\lexdy\\Desktop\\PL_Project\\Videout\\Test\\audio\\Eminem-LoseYourself.mp3" to clip between 0,35
+>>pic = photo from "C:\\Users\\lexdy\\Desktop\\PL_Project\\Videout\\Test\\photos\\BartPic.jpg" lasting 5
+>>concat = concatenateClip clip and pic
+>>renderVid concat
+````
+At this point it will start to load the rendering of the clip
+
+````
+>>clip2 = video from "C:\\Users\\lexdy\\Desktop\\PL_Project\\Videout\\src\\concat.mp4" between 0,5 and 0,10
+>>renderGif clip2
+````
+Then it will start to render the gif
+
+
 ## Video Demonstration
+
+[This](https://youtu.be/afYup8YKshU) is the demonstration of how to make the rendering of a video, including adding audio
+and concatenation. And [this](https://youtu.be/jpoT1KOS9po) would be the result of said rendering. The videos are going to be saved on the src folder 
+with the name of the variable as its name. 
+
+Then [this](https://youtu.be/Ru2kBMBlcYQ) would be the demonstration of how to render a gif, with its [result](https://youtu.be/8No0FH3PHJY) being saved 
+on the src folder as well.
 
 
 ## Authors 
